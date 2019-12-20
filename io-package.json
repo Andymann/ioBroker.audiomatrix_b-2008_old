@@ -1,0 +1,77 @@
+{
+	"common": {
+		"name": "audiomatrix_b-2008",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"zh-cn": "首次出版"
+			}
+		},
+		"title": "Audiomatrix B-2008",
+		"titleLang": {
+			"en": "Audiomatrix B-2008",
+			"de": "Audiomatrix B-2008",
+			"ru": "Audiomatrix B-2008",
+			"pt": "Audiomatrix B-2008",
+			"nl": "Audiomatrix B-2008",
+			"fr": "Audiomatrix B-2008",
+			"it": "Audiomatrix B-2008",
+			"es": "Audiomatrix B-2008",
+			"pl": "Audiomatrix B-2008",
+			"zh-cn": "音频矩阵B-2008"
+		},
+		"desc": {
+			"en": "audiomatrix_b-2008",
+			"de": "audiomatrix_b-2008",
+			"ru": "audiomatrix_b-2008",
+			"pt": "audiomatrix_b-2008",
+			"nl": "audiomatrix_b 2008",
+			"fr": "audiomatrix_b-2008",
+			"it": "audiomatrix_b del 2008",
+			"es": "audiomatrix_b-2008",
+			"pl": "audiomatrix_b-2008",
+			"zh-cn": "audiomatrix_b-2008"
+		},
+		"authors": [
+			"Andy <info@andyland.info>"
+		],
+		"keywords": [
+			"ioBroker",
+			"template",
+			"Smart Home",
+			"home automation"
+		],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "audiomatrix_b-2008.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/Andymann/ioBroker.audiomatrix_b-2008/master/admin/audiomatrix_b-2008.png",
+		"readme": "https://github.com/Andymann/ioBroker.audiomatrix_b-2008/blob/master/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "multimedia",
+		"compact": true,
+		"materialize": true,
+		"dependencies": [
+			{
+				"js-controller": ">=1.4.2"
+			}
+		]
+	},
+	"native": {
+		"option1": true,
+		"option2": "42"
+	},
+	"objects": [],
+	"instanceObjects": []
+}
