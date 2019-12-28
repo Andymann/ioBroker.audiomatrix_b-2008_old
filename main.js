@@ -117,28 +117,28 @@ class AudiomatrixB2008 extends utils.Adapter {
 	
 	
 	  _connect(){
-		
+		this.log.info("_connect()");
 //                if(!tabu){             //----Damit nicht gepolled wird, wenn gerade etwas anderes stattfindet.
                     if(bConnection==false){
 						if(bWaitingForResponse==false){
-	                        parentThis.log.info('AudioMatrix: connectMatrix().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
+	                        parentThis.log.info('AudioMatrix: _connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
         	                arrCMD.push(cmdConnect);
         	                iMaxTryCounter = 3;
         	                parentThis.processCMD();
 						}else{
-							parentThis.log.info('AudioMatrix: connectMatrix().connection==false, bWaitingForResponse==false; nichts machen');
+							parentThis.log.info('AudioMatrix: _connect().connection==false, bWaitingForResponse==false; nichts machen');
 						}
                     }else{
                         if(bQueryDone==true){
                             if(arrCMD.length==0){
-	                    	    parentThis.log.debug('AudioMatrix: connectMatrix().connection==true, bQueryDone==TRUE, idle, pinging Matrix');
+	                    	    parentThis.log.debug('AudioMatrix: _connect().connection==true, bQueryDone==TRUE, idle, pinging Matrix');
         	                	parentThis.pingMatrix();                                                                                                          
                             }else{
-                                parentThis.log.debug('AudioMatrix: connectMatrix().connection==true, bQueryDone==TRUE, arrCMD.length>0; idle, aber KEIN ping auf Matrix');
+                                parentThis.log.debug('AudioMatrix: _connect().connection==true, bQueryDone==TRUE, arrCMD.length>0; idle, aber KEIN ping auf Matrix');
                             }
                         }else{
                             if(!bQueryInProgress){
-                                parentThis.log.debug('AudioMatrix: connectMatrix().connection==true, bQueryDone==FALSE, idle, query Matrix');                            
+                                parentThis.log.debug('AudioMatrix: _connect().connection==true, bQueryDone==FALSE, idle, query Matrix');                            
                                 parentThis.queryMatrix();
                             }
                         }                                                                                           
@@ -153,13 +153,13 @@ class AudiomatrixB2008 extends utils.Adapter {
 									//----Es kann passieren, dass man direkt NACH dem Senden eines Befehls an die Matrix und VOR der Antwort hier landet.
 									//----deswegen wird erstmal der MaxTryCounter heruntergesetzt und -sofern nichts kommt- bis zum naechsten Timeout gewartet.
 									//----Wenn iMaxTryCounter==0 ist, koennen wir von einem Problem ausgehen
-									parentThis.log.info('AudioMatrix: connectMatrix(): kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==' + iMaxTryCounter.toString() );
-									parentThis.log.info('AudioMatrix: connectMatrix(): kleines Timeout. lastCMD =' + parentThis.toHexString(lastCMD) + ' nichts tun, noch warten');
+									parentThis.log.info('AudioMatrix: _connect(): kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==' + iMaxTryCounter.toString() );
+									parentThis.log.info('AudioMatrix: _connect(): kleines Timeout. lastCMD =' + parentThis.toHexString(lastCMD) + ' nichts tun, noch warten');
 									iMaxTryCounter--;   
 //									parentThis.setState('minorProblem', true, true);
 								}else{
 									if(iMaxTimeoutCounter<3){
-										parentThis.log.info('AudioMatrix: connectMatrix() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD));
+										parentThis.log.info('AudioMatrix: _connect() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD));
 										iMaxTimeoutCounter++;
 										iMaxTryCounter=3;
 										if(lastCMD !== undefined){
@@ -168,9 +168,9 @@ class AudiomatrixB2008 extends utils.Adapter {
 											}, 100);
 										}
 									}else{
-										parentThis.log.error('AudioMatrix: connectMatrix() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD) + 'schlug mehrfach fehl');
+										parentThis.log.error('AudioMatrix: _connect() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD) + 'schlug mehrfach fehl');
 										iMaxTimeoutCounter=0;
-										parentThis.log.error('AudioMatrix: connectMatrix() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0');
+										parentThis.log.error('AudioMatrix: _connect() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0');
 										//parentThis.log.error('WIE reagieren wir hier drauf? Was ist, wenn ein Befehl nicht umgesetzt werden konnte?');
 										bWaitingForResponse=false;
 										lastCMD = '';
@@ -182,10 +182,10 @@ class AudiomatrixB2008 extends utils.Adapter {
                             }else{
 //								parentThis.setState('minorProblem', true, true);
 								if(bConnection==true){
-                                    parentThis.log.info('AudioMatrix: connectMatrix(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE. Abwarten. iMaxTryCounter==' + iMaxTryCounter.toString() );
+                                    parentThis.log.info('AudioMatrix: _connect(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE. Abwarten. iMaxTryCounter==' + iMaxTryCounter.toString() );
                                 }else{
                                     //----Fuer den Fall, dass der Verbindungsversuch fehlschlaegt
-                                    parentThis.log.info('AudioMatrix: connectMatrix(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE. Connection==FALSE. iMaxTryCounter==' + iMaxTryCounter.toString() );
+                                    parentThis.log.info('AudioMatrix: _connect(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE. Connection==FALSE. iMaxTryCounter==' + iMaxTryCounter.toString() );
 				    				bWaitingForResponse=false;
                                     iMaxTryCounter--;
                                 }
@@ -214,11 +214,12 @@ class AudiomatrixB2008 extends utils.Adapter {
 //        bQueryComplete_Output = false;
 
 	
-        this.log.info('AudioMatrix: connecting to: ' + this.config.host + ':' + this.config.port);
+        this.log.info('connectMatrix(): AudioMatrix: connecting to: ' + this.config.host + ':' + this.config.port);
 
         matrix = new net.Socket();
         matrix.connect(this.config.port, this.config.host, function() {
             clearInterval(query);
+            this.log.info("connectMatrix(): sofort-Connect");
             parentThis._connect();
             query = setInterval(function(){parentThis._connect()}, 10000);
 
