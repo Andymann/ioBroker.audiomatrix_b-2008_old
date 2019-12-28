@@ -34,7 +34,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		this.on("unload", this.onUnload.bind(this));
 	}
 
-	initmatrix(){
+	initMatrix(){
         this.log.info('initMatrix().');
         //this.connectmatrix();                                                  
     }
