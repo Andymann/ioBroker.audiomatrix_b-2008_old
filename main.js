@@ -116,7 +116,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	}
 	
 	
-	_connect(){
+	function _connect(){
 		
 //                if(!tabu){             //----Damit nicht gepolled wird, wenn gerade etwas anderes stattfindet.
                     if(bConnection==false){
