@@ -199,7 +199,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 //                    parentThis.log.debug('AudioMatrix: connectMatrix().Im Ping-Intervall aber tabu==TRUE. Nichts machen.');
 //                }
             
-	
+		return;
 	}
 	
 	connectMatrix(cb){
