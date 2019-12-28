@@ -37,5 +37,29 @@ systemDictionary = {
 		"es": "opcion 2",
 		"pl": "Opcja 2",
 		"zh-cn": "选项2"
+	},
+	'host':	{
+		'en': 'Host',
+		'de': 'Host',
+		'ru': 'Host',
+		'pt': 'Host',
+		'nl': 'Host',
+		'fr': 'Host',
+		'it': 'Host',
+		'es': 'Host',
+		'pl': 'Host',
+		'zh-cn': 'Host'
+	},
+	'port': {
+		'en': 'Port',
+		'de': 'Port',
+		'ru': 'Port',
+		'pt': 'Port',
+		'nl': 'Port',
+		'fr': 'Port',
+		'it': 'Port',
+		'es': 'Port',
+		'pl': 'Port',
+		'zh-cn': 'Port'
 	}
 };
