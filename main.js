@@ -18,6 +18,7 @@ var bWaitingForResponse = false;
 var bQueryDone = false;
 var bQueryInProgress=false;
 var iMaxTryCounter = 0;
+var iMaxTimeoutCounter = 0;
 var arrCMD = [];
 var lastCMD;
 var in_msg = "";
