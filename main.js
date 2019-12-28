@@ -116,7 +116,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	}
 	
 	
-	 function x_connect(){
+	  x_connect(){
 		
 //                if(!tabu){             //----Damit nicht gepolled wird, wenn gerade etwas anderes stattfindet.
                     if(bConnection==false){
@@ -220,7 +220,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         matrix.connect(this.config.port, this.config.host, function() {
             clearInterval(query);
             //parentThis.x_connect();
-            query = setInterval(parentThis.x_connect(), 10000);
+            query = setInterval(new function parentThis.x_connect(), 10000);
 
             if(cb){
                 cb();
