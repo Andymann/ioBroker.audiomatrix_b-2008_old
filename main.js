@@ -219,7 +219,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         matrix = new net.Socket();
         matrix.connect(this.config.port, this.config.host, function() {
             clearInterval(query);
-            //parentThis.x_connect();
+            parentThis.x_connect();
             query = setInterval(function(){parentThis.x_connect()}, 10000);
 
             if(cb){
