@@ -116,24 +116,8 @@ class AudiomatrixB2008 extends utils.Adapter {
 	}
 	
 	
-	connectMatrix(cb){
-        var host = this.config.host;
-        var port = this.config.port;
-        
-        bQueryDone = false;
-        bQueryInProgress=false;
-
-//        bQueryComplete_Routing = false;
-//        bQueryComplete_Input = false;
-//        bQueryComplete_Output = false;
-
-	
-        this.log.info('AudioMatrix: connecting to: ' + this.config.host + ':' + this.config.port);
-
-        matrix = new net.Socket();
-        matrix.connect(this.config.port, this.config.host, function() {
-            clearInterval(query);
-            query = setInterval(function() {
+	_connect(){
+		
 //                if(!tabu){             //----Damit nicht gepolled wird, wenn gerade etwas anderes stattfindet.
                     if(bConnection==false){
 						if(bWaitingForResponse==false){
@@ -214,7 +198,29 @@ class AudiomatrixB2008 extends utils.Adapter {
 //                }else{
 //                    parentThis.log.debug('AudioMatrix: connectMatrix().Im Ping-Intervall aber tabu==TRUE. Nichts machen.');
 //                }
-            }, 10000);
+            
+	
+	}
+	
+	connectMatrix(cb){
+        var host = this.config.host;
+        var port = this.config.port;
+        
+        bQueryDone = false;
+        bQueryInProgress=false;
+
+//        bQueryComplete_Routing = false;
+//        bQueryComplete_Input = false;
+//        bQueryComplete_Output = false;
+
+	
+        this.log.info('AudioMatrix: connecting to: ' + this.config.host + ':' + this.config.port);
+
+        matrix = new net.Socket();
+        matrix.connect(this.config.port, this.config.host, function() {
+            clearInterval(query);
+            parentThis._connect();
+            query = setInterval(parentThis._connect(), 10000);
 
             if(cb){
                 cb();
@@ -275,7 +281,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         });
 
         matrix.on('close', function(e) {
-            if(connection){
+            if(bConnection){
                 parentThis.log.error('AudioMatrix closed');
             }
             //parentThis.reconnect();
