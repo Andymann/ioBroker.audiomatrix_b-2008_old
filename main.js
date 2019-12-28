@@ -20,7 +20,7 @@ var bQueryInProgress=false;
 var iMaxTryCounter = 0;
 var arrCMD = [];
 var lastCMD;
-var in_msg = """;
+var in_msg = "";
 var parentThis;
 var cmdConnect =    new Buffer([0x5A, 0xA5, 0x14, 0x00, 0x40, 0x00, 0x00, 0x00, 0x0A, 0x5D]);
 
