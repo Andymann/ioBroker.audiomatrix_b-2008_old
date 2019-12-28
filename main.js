@@ -220,7 +220,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         matrix.connect(this.config.port, this.config.host, function() {
             clearInterval(query);
             //parentThis._connect();
-            query = setInterval(parentThis._connect(), 10000);
+            query = setInterval(_connect(), 10000);
 
             if(cb){
                 cb();
