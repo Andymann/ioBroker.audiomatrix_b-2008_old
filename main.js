@@ -34,6 +34,12 @@ class AudiomatrixB2008 extends utils.Adapter {
 		this.on("unload", this.onUnload.bind(this));
 	}
 
+	initmatrix(){
+        this.log.info('initMatrix().');
+        //this.connectmatrix();                                                  
+    }
+
+
 	/**
 	 * Is called when databases are connected and adapter received configuration.
 	 */
@@ -87,6 +93,9 @@ class AudiomatrixB2008 extends utils.Adapter {
 
 		result = await this.checkGroupAsync("admin", "admin");
 		this.log.info("check group user admin group admin: " + result);
+		
+		//----
+		this.initMatrix();
 	}
 
 	/**
