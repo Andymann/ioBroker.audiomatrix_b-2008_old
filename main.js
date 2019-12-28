@@ -10,6 +10,12 @@ const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
+var net = require('net');
+var matrix;
+var bConnection = false;
+var cmdConnect =    new Buffer([0x5A, 0xA5, 0x14, 0x00, 0x40, 0x00, 0x00, 0x00, 0x0A, 0x5D]);
+
+
 
 class AudiomatrixB2008 extends utils.Adapter {
 
@@ -39,6 +45,8 @@ class AudiomatrixB2008 extends utils.Adapter {
 		this.log.info("config option1: " + this.config.option1);
 		this.log.info("config option2: " + this.config.option2);
 
+		this.log.info("Config Host:" + this.config.host);
+		this.log.info("Config Port:" + this.config.port);
 		/*
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"

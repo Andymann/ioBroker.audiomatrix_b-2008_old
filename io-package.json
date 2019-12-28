@@ -18,6 +18,10 @@
 			"0.0.2": {
 				"en": "Admin interface",
 				"de": "Adminoberfläche"
+			},
+			"0.0.3": {
+				"en": "First functions",
+				"de": "Erste Funktionen"
 			}
 		},
 		"title": "Audiomatrix B-2008",
