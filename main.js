@@ -229,6 +229,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         });
 
         matrix.on('data', function(chunk) {
+        	parentThis.log.info("matrix.onData(): " + parentThis.toHexString(chunk) );
 /*
             in_msg += parentThis.toHexString(chunk);
 
