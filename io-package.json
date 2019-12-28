@@ -71,6 +71,8 @@
 	"native": {
 		"option1": true,
 		"option2": "42"
+		"host": "192.168.0.100",
+        	"port": 1024
 	},
 	"objects": [],
 	"instanceObjects": []
