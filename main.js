@@ -363,7 +363,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 //					iMaxTimeoutCounter = 0;
 //					parentThis.processCMD();            
 				}else if(in_msg.toLowerCase().substring(iStartPos+4,iStartPos+6)=='11'){
-					//----5aa511c2c00000c2c00000c2c00000c2c0
+					//----5aa511c2c00000c2c00000c2c00000c2c0...
 					//----In der Regel als Antwort auf einen PING
 					parentThis.log.info("LevelMeter incoming");
 					bWaitingForResponse=false;
@@ -373,6 +373,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 				}                                                                                           
 			}
 		}else{
+			//----Durch die PING-Mechanik kommt hier recht viel an, da muessen wir spaeter drauf schauen.
 			//parentThis.log.info('AudioMatrix: matrix.on data(): incomming aber bWaitingForResponse==FALSE; in_msg:' + in_msg);
 		}
 		
