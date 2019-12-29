@@ -337,7 +337,7 @@ class AudiomatrixB2008 extends utils.Adapter {
                 this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
             }
         }else{
-            this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==TRUE. Nichts machen');
+            this.log.info('AudioMatrix: processCMD: bWaitingForResponse==TRUE. Nichts machen');
         }
 
         //----Anzeige der Quelength auf der Oberflaeche
