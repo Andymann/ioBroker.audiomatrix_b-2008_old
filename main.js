@@ -300,7 +300,7 @@ class AudiomatrixB2008 extends utils.Adapter {
             iMaxTryCounter = MAXTRIES;
         	parentThis.processCMD();
 		}else{
-			parentThis.log.debug('_connect().bConnection==true. Nichts tun);
+			parentThis.log.debug("_connect().bConnection==true. Nichts tun");
 			//----Bei Marani koennten wir etwas tun, hier nicht unbedingt
 		}
 		
