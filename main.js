@@ -361,7 +361,11 @@ class AudiomatrixB2008 extends utils.Adapter {
 					lastCMD = '';
 					//iMaxTryCounter = 3;
 //					iMaxTimeoutCounter = 0;
-//					parentThis.processCMD();                        
+//					parentThis.processCMD();            
+				}else if(in_msg.toLowerCase().substring(iStartPos+4,iStartPos+6)=='11'){}
+					//----5aa511c2c00000c2c00000c2c00000c2c0
+					parentThis.log.info("LevelMeter incoming");
+					bWaitingForResponse=false;
 				}else{
 					//----Irgendwie vergniesgnaddelt
 					parentThis.log.info('AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:' + in_msg);                                                                                                   
