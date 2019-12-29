@@ -308,7 +308,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		setTimeout(function(){ parentThis._connectionHandler }, SMALLINTERVALL);	
 	}
 	
-	_processIncoming(){
+	_processIncoming(chunk){
 		parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
 	}
 	
