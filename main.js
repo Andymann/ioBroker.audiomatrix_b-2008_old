@@ -388,6 +388,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			bQueryDone=true;
 			bQueryInProgress=false;
 			bWaitingForResponse=false;
+			this.pingMatrix
 		}else{
 			//--- TBD
 		}
