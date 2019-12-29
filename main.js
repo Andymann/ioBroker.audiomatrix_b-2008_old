@@ -25,6 +25,8 @@ var lastCMD;
 var in_msg = "";
 var parentThis;
 var cmdConnect =    new Buffer([0x5A, 0xA5, 0x14, 0x00, 0x40, 0x00, 0x00, 0x00, 0x0A, 0x5D]);
+var cmdBasicResponse = new Buffer([0x5A, 0xA5, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0x0A, 0xA9]);
+var cmdTransmissionDone = new Buffer([0x5A, 0xA5, 0xF1, 0xF1, 0xF1, 0xF1, 0xF1, 0xF1, 0x0A, 0xAF]);
 
 const MAXTRIES = 3;
 const BIGINTERVALL = 10000;
@@ -55,7 +57,29 @@ class AudiomatrixB2008 extends utils.Adapter {
             return ('0' + (byte & 0xFF).toString(16)).slice(-2);
         }).join('')
     }
+    
+    //----Hex-representing chars to array containing hex cvalues
+    toArray(response){
+        var chunks = [];
+        for (var i = 0, charsLength = response.length; i < charsLength; i += 2) {
+            chunks.push(parseInt(response.substring(i, i + 2), 16));
+        }
+        return chunks;
+    }
 
+	compareArray(pArr1, pArr2){
+		bReturn = false;
+		if(pArr1.length==pArr2.length){
+			for (i = 0; i < pArr1.length; i++) {
+				if(pArr1[i]!=pArr2[i]){
+					break;
+				}
+				bReturn = true;
+  			}
+		}
+		return bReturn;
+	}
+	
 	initMatrix(){
         this.log.info('initMatrix().');
         this.connectMatrix();                                                  
@@ -316,13 +340,11 @@ class AudiomatrixB2008 extends utils.Adapter {
 			if((in_msg.length >= 20) && (in_msg.includes('5aa5'))){
 				var iStartPos = in_msg.indexOf('5aa5');
 				if(in_msg.toLowerCase().substring(iStartPos+16,iStartPos+18)=='0a'){                                                                                              
-//					bWaitingForResponse = false;
-					var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+20);	//Checksum
-					//in_msg = '';
+//					var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+20);	//Checksum
 					in_msg = in_msg.slice(20);
 					parentThis.log.info('_processIncoming(); filtered:' + tmpMSG);
 //					parentThis.bWaitingForResponse = false;
-//					parentThis.parseMsg(tmpMSG);
+					parentThis.parseMsg(tmpMSG);
 					
 					lastCMD = '';
 					//iMaxTryCounter = 3;
@@ -337,11 +359,22 @@ class AudiomatrixB2008 extends utils.Adapter {
 			parentThis.log.info('AudioMatrix: matrix.on data(): incomming aber bWaitingForResponse==FALSE; in_msg:' + in_msg);
 		}
 		
-		if(in_msg.length > 60){
+		if(in_msg.length > 120){
 			//----Just in case
 			in_msg = '';
 		}
 	}
+	
+	_parseMSG(sMSG){
+		this.log.info("_parseMSG():" + sMSG");
+		if( sMSG.equals(toHexString(cmdBasicResponse)) ){
+			this.log.info("_parseMSG(): Basic Response.");
+		}else if( sMSG.equals(toHexString(cmdTransmissionDone)) ){
+			this.log.info("_parseMSG(): TransmissionDone.");
+		}
+	}
+	
+	
 	
 	connectMatrix(cb){
 		this.log.info('connectMatrix():' + this.config.host + ':' + this.config.port);
