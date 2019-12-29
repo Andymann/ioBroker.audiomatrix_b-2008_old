@@ -338,6 +338,7 @@ class AudiomatrixB2008 extends utils.Adapter {
                     if(bHasIncomingData==false){
                     	//----Nach x Milisekunden ist noch gar nichts angekommen....
                     	parentThis.log.error("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. OFFLINE?");
+                    	clearInterval(pingInterval);
                     	bWaitingForResponse=false;
                     	parentThis.reconnect();
                     }else{
