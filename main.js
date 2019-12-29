@@ -384,10 +384,10 @@ class AudiomatrixB2008 extends utils.Adapter {
 			//this.bConnection=true;
 		}else if( sMSG===this.toHexString(cmdTransmissionDone) ){
 			this.log.info("_parseMSG(): Transmission Done.");
-			this.bConnection=true;
-			this.bQueryDone=true;
-			this.bQueryInProgress=false;
-			this.bWaitingForResponse=false;
+			bConnection=true;
+			bQueryDone=true;
+			bQueryInProgress=false;
+			bWaitingForResponse=false;
 		}else{
 			//--- TBD
 		}
