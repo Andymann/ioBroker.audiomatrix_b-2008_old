@@ -29,6 +29,7 @@ var cmdBasicResponse = new Buffer([0x5A, 0xA5, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF
 var cmdTransmissionDone = new Buffer([0x5A, 0xA5, 0xF1, 0xF1, 0xF1, 0xF1, 0xF1, 0xF1, 0x0A, 0xAF]);
 
 const MAXTRIES = 3;
+const PINGINTERVALL = 1000;
 const BIGINTERVALL = 10000;
 const SMALLINTERVALL = 333;
 
@@ -89,7 +90,12 @@ class AudiomatrixB2008 extends utils.Adapter {
 	
 	
 	pingMatrix(){
-		this.log.info('AudioMatrix: pingMatrix(). TBD' );
+		if(this.bConnection==true){
+			this.log.info('AudioMatrix: pingMatrix(). bConnection==true' );
+		}else{
+		
+		}
+		
 //        arrCMD.push(cmdConnect);
 //        iMaxTryCounter = 3;
 //        this.processCMD();
@@ -290,6 +296,26 @@ class AudiomatrixB2008 extends utils.Adapter {
 		return;
 	}
 	
+	
+	
+	
+	_connect(){
+		this.log.info("_connect()");
+		if(!bConnection){			
+	        parentThis.log.info('_connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
+            arrCMD.push(cmdConnect);
+            iMaxTryCounter = MAXTRIES;
+        	parentThis.processCMD();
+		}else{
+			parentThis.log.debug("_connect().bConnection==true. Nichts tun");
+			//----Bei Marani koennten wir etwas tun, hier nicht unbedingt
+		}
+		
+		//----Die verschiedenen Probleme rund um den Connect werden hier verarbeitet
+		setTimeout(function(){ parentThis._connectionHandler }, SMALLINTERVALL);	
+	}
+	
+	
 	/*
 		Alle Befehle werden in arrCMD[] gespeichert. Die Methode arbeitet den naechsten Befehl ab.	
 	*/
@@ -315,23 +341,6 @@ class AudiomatrixB2008 extends utils.Adapter {
 //        this.setStateAsync('queuelength', { val: arrCMD.length, ack: true });
 	}
 	
-	
-	_connect(){
-		this.log.info("_connect()");
-		if(!bConnection){			
-	        parentThis.log.info('_connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
-            arrCMD.push(cmdConnect);
-            iMaxTryCounter = MAXTRIES;
-        	parentThis.processCMD();
-		}else{
-			parentThis.log.debug("_connect().bConnection==true. Nichts tun");
-			//----Bei Marani koennten wir etwas tun, hier nicht unbedingt
-		}
-		
-		//----Die verschiedenen Probleme rund um den Connect werden hier verarbeitet
-		setTimeout(function(){ parentThis._connectionHandler }, SMALLINTERVALL);	
-	}
-	
 	_processIncoming(chunk){
 		//parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
 		in_msg += parentThis.toHexString(chunk);
@@ -341,7 +350,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 				var iStartPos = in_msg.indexOf('5aa5');
 				if(in_msg.toLowerCase().substring(iStartPos+16,iStartPos+18)=='0a'){                                                                                              
 					var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+20);	//Checksum
-					in_msg = in_msg.slice(20);
+					in_msg = in_msg.slice(20);	//Die ersten 20 Zeichen abschneiden
 					//parentThis.log.info('_processIncoming(); filtered:' + tmpMSG);
 //					parentThis.bWaitingForResponse = false;
 					parentThis._parseMSG(tmpMSG);
@@ -369,17 +378,23 @@ class AudiomatrixB2008 extends utils.Adapter {
 		this.log.info("_parseMSG():" + sMSG);
 		if( sMSG===this.toHexString(cmdBasicResponse) ){
 			this.log.info("_parseMSG(): Basic Response.");
+			//this.bConnection=true;
 		}else if( sMSG===this.toHexString(cmdTransmissionDone) ){
-			this.log.info("_parseMSG(): TransmissionDone.");
+			this.log.info("_parseMSG(): Transmission Done.");
+			this.bConnection=true;
+			this.bQueryDone=true;
+			this.bQueryInProgress=false;
+			this.bWaitingForResponse=false;
+		}else{
+			//--- TBD
 		}
 	}
-	
-	
+		
 	
 	connectMatrix(cb){
 		this.log.info('connectMatrix():' + this.config.host + ':' + this.config.port);
 		 
-        bQueryDone = false;
+        bQueryDone=false;
         bQueryInProgress=false;
 
         matrix = new net.Socket();
@@ -387,7 +402,7 @@ class AudiomatrixB2008 extends utils.Adapter {
             clearInterval(query);
             parentThis._connect();
             //query = setInterval(function(){parentThis._connect()}, BIGINTERVALL);
-
+			query = setInterval(function(){parentThis.pingMatrix()}, PINGINTERVALL);
             if(cb){
                 cb();
             }                             
