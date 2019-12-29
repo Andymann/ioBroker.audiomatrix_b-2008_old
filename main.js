@@ -340,7 +340,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			if((in_msg.length >= 20) && (in_msg.includes('5aa5'))){
 				var iStartPos = in_msg.indexOf('5aa5');
 				if(in_msg.toLowerCase().substring(iStartPos+16,iStartPos+18)=='0a'){                                                                                              
-//					var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+20);	//Checksum
+					var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+20);	//Checksum
 					in_msg = in_msg.slice(20);
 					parentThis.log.info('_processIncoming(); filtered:' + tmpMSG);
 //					parentThis.bWaitingForResponse = false;
