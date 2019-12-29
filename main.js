@@ -180,7 +180,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		}
 	}
 	*/
-	 x _connect(){
+	 x_connect(){
 		this.log.info("_connect()");
 //                if(!tabu){             //----Damit nicht gepolled wird, wenn gerade etwas anderes stattfindet.
                     if(bConnection==false){
