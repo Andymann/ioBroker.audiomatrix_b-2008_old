@@ -94,7 +94,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	pingMatrix(){
 		if(this.bConnection==true){
 			this.log.info('AudioMatrix: pingMatrix(). bConnection==true' );
-			arrCMD.push(cmdPing);
+			arrCMD.push(cmdConnect);
 //			iMaxTryCounter = 3;
 	        this.processCMD();
 		}else{
@@ -362,7 +362,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 //					parentThis.processCMD();                        
 				}else{
 					//----Irgendwie vergniesgnaddelt
-					parentThis.log.info('AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:' + in_msg);                                                                                                   
+//					parentThis.log.info('AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:' + in_msg);                                                                                                   
 				}                                                                                           
 			}
 		}else{
