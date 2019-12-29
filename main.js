@@ -362,7 +362,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 					//iMaxTryCounter = 3;
 //					iMaxTimeoutCounter = 0;
 //					parentThis.processCMD();            
-				}else if(in_msg.toLowerCase().substring(iStartPos+4,iStartPos+6)=='11'){}
+				}else if(in_msg.toLowerCase().substring(iStartPos+4,iStartPos+6)=='11'){
 					//----5aa511c2c00000c2c00000c2c00000c2c0
 					parentThis.log.info("LevelMeter incoming");
 					bWaitingForResponse=false;
