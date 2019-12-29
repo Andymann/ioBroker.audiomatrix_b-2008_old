@@ -309,7 +309,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	}
 	
 	_processIncoming(chunk){
-		parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
+		//parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
 		in_msg += parentThis.toHexString(chunk);
 		
 		if(bWaitingForResponse==true){                                                                          
