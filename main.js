@@ -367,9 +367,9 @@ class AudiomatrixB2008 extends utils.Adapter {
 	
 	_parseMSG(sMSG){
 		this.log.info("_parseMSG():" + sMSG);
-		if( sMSG.equals(toHexString(cmdBasicResponse)) ){
+		if( sMSG.equals(this.toHexString(cmdBasicResponse)) ){
 			this.log.info("_parseMSG(): Basic Response.");
-		}else if( sMSG.equals(toHexString(cmdTransmissionDone)) ){
+		}else if( sMSG.equals(this.toHexString(cmdTransmissionDone)) ){
 			this.log.info("_parseMSG(): TransmissionDone.");
 		}
 	}
