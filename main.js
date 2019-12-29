@@ -318,7 +318,8 @@ class AudiomatrixB2008 extends utils.Adapter {
 				if(in_msg.toLowerCase().substring(iStartPos+16,iStartPos+18)=='0a'){                                                                                              
 //					bWaitingForResponse = false;
 					var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+20);	//Checksum
-					in_msg = '';
+					//in_msg = '';
+					in_msg = in_msg.slice(20);
 					parentThis.log.info('_processIncoming(); filtered:' + tmpMSG);
 //					parentThis.bWaitingForResponse = false;
 //					parentThis.parseMsg(tmpMSG);
