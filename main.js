@@ -399,6 +399,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		 
         bQueryDone=false;
         bQueryInProgress=false;
+        bWaitingForResponse=false;
 
         matrix = new net.Socket();
         matrix.connect(this.config.port, this.config.host, function() {
