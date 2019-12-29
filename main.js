@@ -367,6 +367,11 @@ class AudiomatrixB2008 extends utils.Adapter {
 					//----In der Regel als Antwort auf einen PING
 					parentThis.log.info("LevelMeter incoming");
 					bWaitingForResponse=false;
+				}else if(in_msg.toLowerCase().substring(iStartPos+4,iStartPos+6)=='12'){
+					//----5aa512c2c00000c2c00000c...
+					//----In der Regel als Antwort auf einen PING
+					parentThis.log.info("Sprectrum incoming");
+					bWaitingForResponse=false;
 				}else{
 					//----Irgendwie vergniesgnaddelt
 					parentThis.log.info('AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:' + in_msg);                                                                                                   
