@@ -89,11 +89,9 @@ class AudiomatrixB2008 extends utils.Adapter {
     }
 
 	
-	
-	
 	pingMatrix(){
 		if(bConnection==true){
-			this.log.info('AudioMatrix: pingMatrix(). bConnection==true' );
+			this.log.info('pingMatrix()' );
 			arrCMD.push(cmdConnect);
 //			iMaxTryCounter = 3;
 	        this.processCMD();
@@ -322,10 +320,10 @@ class AudiomatrixB2008 extends utils.Adapter {
 		Alle Befehle werden in arrCMD[] gespeichert. Die Methode arbeitet den naechsten Befehl ab.	
 	*/
 	processCMD(){
-		this.log.info("processCMD()");
+		//this.log.info("processCMD()");
 		if(bWaitingForResponse==false){
 			if(arrCMD.length>0){
-                this.log.info('processCMD: bWaitingForResponse==FALSE, arrCMD.length=' +arrCMD.length.toString());
+                //this.log.info('processCMD: bWaitingForResponse==FALSE, arrCMD.length=' +arrCMD.length.toString());
                 bWaitingForResponse=true;
                 var tmp = arrCMD.shift();
                 this.log.info('processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
@@ -365,12 +363,12 @@ class AudiomatrixB2008 extends utils.Adapter {
 				}else if(in_msg.toLowerCase().substring(iStartPos+4,iStartPos+6)=='11'){
 					//----5aa511c2c00000c2c00000c2c00000c2c0...
 					//----In der Regel als Antwort auf einen PING
-					parentThis.log.info("LevelMeter incoming");
+					//parentThis.log.info("LevelMeter incoming");
 					bWaitingForResponse=false;
 				}else if(in_msg.toLowerCase().substring(iStartPos+4,iStartPos+6)=='12'){
 					//----5aa512c2c00000c2c00000c...
 					//----In der Regel als Antwort auf einen PING
-					parentThis.log.info("Sprectrum incoming");
+					//parentThis.log.info("Sprectrum incoming");
 					bWaitingForResponse=false;
 				}else{
 					//----Irgendwie vergniesgnaddelt
