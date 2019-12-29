@@ -92,7 +92,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	
 	
 	pingMatrix(){
-		if(this.bConnection==true){
+		if(bConnection==true){
 			this.log.info('AudioMatrix: pingMatrix(). bConnection==true' );
 			arrCMD.push(cmdConnect);
 //			iMaxTryCounter = 3;
