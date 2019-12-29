@@ -34,7 +34,7 @@ const MAXTRIES = 3;
 const PINGINTERVALL = 1000;
 const BIGINTERVALL = 10000;
 const SMALLINTERVALL = 333;
-const OFFLINETIMER = 2000;
+const OFFLINETIMER = 3500;
 
 class AudiomatrixB2008 extends utils.Adapter {
 
