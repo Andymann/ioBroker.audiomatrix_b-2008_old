@@ -364,7 +364,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 //					parentThis.processCMD();                        
 				}else{
 					//----Irgendwie vergniesgnaddelt
-//					parentThis.log.info('AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:' + in_msg);                                                                                                   
+					parentThis.log.info('AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:' + in_msg);                                                                                                   
 				}                                                                                           
 			}
 		}else{
