@@ -232,7 +232,7 @@ class AudiomatrixB2008 extends utils.Adapter {
                                 parentThis.log.debug('AudioMatrix: _connect().connection==true, bQueryDone==TRUE, arrCMD.length>0; idle, aber KEIN ping auf Matrix');
                             }
                         }else{
-                            if(!bQueryInProgress){
+                            if(bQueryInProgress==false){
                                 parentThis.log.debug('AudioMatrix: _connect().connection==true, bQueryDone==FALSE, idle, query Matrix');                            
                                 parentThis.queryMatrix();
                             }
@@ -302,7 +302,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	
 	_connect(){
 		this.log.info("_connect()");
-		if(!bConnection){			
+		if(bConnection==false){			
 	        parentThis.log.info('_connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
             arrCMD.push(cmdConnect);
             iMaxTryCounter = MAXTRIES;
@@ -322,11 +322,11 @@ class AudiomatrixB2008 extends utils.Adapter {
 	*/
 	processCMD(){
 		this.log.info("processCMD()");
-		if(!bWaitingForResponse){
+		if(bWaitingForResponse==false){
 			this.log.info("processCMD():INSIDE 1");
             if(arrCMD.length>0){
                 this.log.info('processCMD: bWaitingForResponse==FALSE, arrCMD.length=' +arrCMD.length.toString());
-                bWaitingForResponse=true;
+                this.bWaitingForResponse=true;
                 var tmp = arrCMD.shift();
                 this.log.info('processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
                 lastCMD = tmp;
