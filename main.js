@@ -11,12 +11,13 @@ const utils = require("@iobroker/adapter-core");
 // Load your modules here, e.g.:
 // const fs = require("fs");
 var net = require('net');
-var matrix;
+var matrix = null;
 var query = null;
 var bConnection = false;
 var bWaitingForResponse = false;
 var bQueryDone = false;
 var bQueryInProgress=false;
+
 var iMaxTryCounter = 0;
 var iMaxTimeoutCounter = 0;
 var arrCMD = [];
@@ -25,7 +26,9 @@ var in_msg = "";
 var parentThis;
 var cmdConnect =    new Buffer([0x5A, 0xA5, 0x14, 0x00, 0x40, 0x00, 0x00, 0x00, 0x0A, 0x5D]);
 
-
+const MAXTRIES = 3;
+const BIGINTERVALL = 10000;
+const SMALLINTERVALL = 333;
 
 class AudiomatrixB2008 extends utils.Adapter {
 
@@ -58,38 +61,18 @@ class AudiomatrixB2008 extends utils.Adapter {
         this.connectMatrix();                                                  
     }
 
-
-	processCMD(){
-		if(!bWaitingForResponse){
-            if(arrCMD.length>0){
-                this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD.length=' +arrCMD.length.toString());
-                bWaitingForResponse=true;
-                var tmp = arrCMD.shift();
-                this.log.debug('AudioMatrix: processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
-                lastCMD = tmp;
-                setTimeout(function() {
-                    matrix.write(tmp);           
-                }, 100);
-            }else{
-                this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
-            }
-        }else{
-            this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==TRUE. Nichts machen');
-        }
-
-        //----Anzeige der Quelength auf der Oberflaeche
-//        this.setStateAsync('queuelength', { val: arrCMD.length, ack: true });
-	}
+	
+	
 	
 	pingMatrix(){
-		this.log.info('AudioMatrix: pingMatrix()' );
+		this.log.info('AudioMatrix: pingMatrix(). TBD' );
 //        arrCMD.push(cmdConnect);
 //        iMaxTryCounter = 3;
 //        this.processCMD();
 	}
 	
 	queryMatrix(){
-		this.log.info('AudioMatrix: queryMatrix(). arrCMD.length vorher=' + arrCMD.length.toString());                      
+		this.log.info('AudioMatrix: queryMatrix(). TBD.  arrCMD.length vorher=' + arrCMD.length.toString());                      
 //        bQueryInProgress  = true;
 //		this.setState('queryState', true, true);
 //        arrQuery.forEach(function(item, index, array) {                             
@@ -101,7 +84,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	}
 	
 	reconnect(){
-		this.log.info('AudioMatrix: reconnectMatrix()');
+		this.log.info('AudioMatrix: reconnectMatrix(). TBD');
 //        bConnection = false;
 //        clearInterval(query);
 //        clearTimeout(recnt);
@@ -116,7 +99,88 @@ class AudiomatrixB2008 extends utils.Adapter {
 	}
 	
 	
-	  _connect(){
+	/*
+		Die Untermethode zum Abbilden der Funktionen aus connect(). Es geht darum, den Code ingesamt lesbarer zu machen.
+	*/
+	/*
+	_connect(){
+		this.log.info("_connect()");
+		if(!bConnection){
+			if(bWaitingForResponse==false){
+	            parentThis.log.info('_connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
+        	    arrCMD.push(cmdConnect);
+        	    iMaxTryCounter = MAXTRIES;
+        	    parentThis.processCMD();
+			}else{
+				parentThis.log.info('_connect().bConnection==false, bWaitingForResponse==true; nichts machen. Wir warten auf Antwort.');
+			}
+		}else{
+			parentThis.log.debug('_connect().bConnection==true. Nichts tun);
+			//----Bei Marani koennten wir etwas tun, hier nicht unbedingt
+		}
+		
+		//----Die verschiedenen Probleme rund um den Connect werden hier verarbeitet
+		setTimeout(function(){ parentThis._connectionHandler }, SMALLINTERVALL);
+	
+	}
+	*/
+	
+	
+	/*
+		Unterfunktion zur Abbildung aller Situationen, die wahrend des Connects auftreten koennen.
+		Was passiert z.B., wenn die Matrix nicht reagiert, etc.
+	*/
+	/*
+	_connectionHandler(){
+		if(bWaitingForResponse==true){
+			if(bQueryInProgress==false){
+				if(iMaxTryCounter>0){
+					//----Es kann passieren, dass man direkt NACH dem Senden eines Befehls an die Matrix und VOR der Antwort hier landet.
+					//----deswegen wird erstmal der MaxTryCounter heruntergesetzt und -sofern nichts kommt- bis zum naechsten Timeout gewartet.
+					//----Wenn iMaxTryCounter==0 ist, koennen wir von einem Problem ausgehen
+					parentThis.log.info('_connectionHandler(): kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==' + iMaxTryCounter.toString() );
+					parentThis.log.info('_connectionHandler(): kleines Timeout. lastCMD =' + parentThis.toHexString(lastCMD) + ' nichts tun, noch warten');
+					iMaxTryCounter--;   
+//					parentThis.setState('minorProblem', true, true);
+				}else{
+					if(iMaxTimeoutCounter<3){
+						parentThis.log.info('_connectionHandler() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD));
+						iMaxTimeoutCounter++;
+						iMaxTryCounter=3;
+						if(lastCMD !== undefined){
+							setTimeout(function() {
+								matrix.write(lastCMD);            
+							}, 100);
+						}
+					}else{
+						parentThis.log.error('_connectionHandler() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD) + 'schlug mehrfach fehl');
+						iMaxTimeoutCounter=0;
+						parentThis.log.error('_connectionHandler() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0');
+						//parentThis.log.error('WIE reagieren wir hier drauf? Was ist, wenn ein Befehl nicht umgesetzt werden konnte?');
+						bWaitingForResponse=false;
+						lastCMD = '';
+						in_msg = '';
+						arrCMD = [];
+						parentThis.reconnect();
+					}
+				}
+			}else{
+//				parentThis.setState('minorProblem', true, true);
+				if(bConnection==true){
+					parentThis.log.info('_connectionHandler(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE, bConnection==TRUE. Abwarten. iMaxTryCounter==' + iMaxTryCounter.toString() );
+				}else{
+					//----Fuer den Fall, dass der Verbindungsversuch fehlschlaegt
+					parentThis.log.info('_connectionHandler(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE. bConnection==FALSE. iMaxTryCounter==' + iMaxTryCounter.toString() );
+					bWaitingForResponse=false;
+					iMaxTryCounter--;
+				}
+			}
+		}else{
+			parentThis.log.info('_connectionHandler(): bWaitingForResponse==FALSE, kein Problem');
+		}
+	}
+	*/
+	 x _connect(){
 		this.log.info("_connect()");
 //                if(!tabu){             //----Damit nicht gepolled wird, wenn gerade etwas anderes stattfindet.
                     if(bConnection==false){
@@ -193,7 +257,7 @@ class AudiomatrixB2008 extends utils.Adapter {
                         }else{
                             //parentThis.log.debug('AudioMatrix: connectMatrix() in_msg: kleines Timeout. bWaitingForResponse==FALSE, kein Problem');
                         }
-                    }, 333/*kleinesIntervall*/);
+                    }, SMALLINTERVALL);
 
 //                }else{
 //                    parentThis.log.debug('AudioMatrix: connectMatrix().Im Ping-Intervall aber tabu==TRUE. Nichts machen.');
@@ -202,26 +266,63 @@ class AudiomatrixB2008 extends utils.Adapter {
 		return;
 	}
 	
+	/*
+		Alle Befehle werden in arrCMD[] gespeichert. Die Methode arbeitet den naechsten Befehl ab.	
+	*/
+	processCMD(){
+		if(!bWaitingForResponse){
+            if(arrCMD.length>0){
+                this.log.debug('processCMD: bWaitingForResponse==FALSE, arrCMD.length=' +arrCMD.length.toString());
+                bWaitingForResponse=true;
+                var tmp = arrCMD.shift();
+                this.log.info('processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
+                lastCMD = tmp;
+                setTimeout(function() {
+                    matrix.write(tmp);           
+                }, 1);
+            }else{
+                this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
+            }
+        }else{
+            this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==TRUE. Nichts machen');
+        }
+
+        //----Anzeige der Quelength auf der Oberflaeche
+//        this.setStateAsync('queuelength', { val: arrCMD.length, ack: true });
+	}
+	
+	
+	_connect(){
+		this.log.info("_connect()");
+		if(!bConnection){			
+	        parentThis.log.info('_connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
+            arrCMD.push(cmdConnect);
+            iMaxTryCounter = MAXTRIES;
+        	parentThis.processCMD();
+		}else{
+			parentThis.log.debug('_connect().bConnection==true. Nichts tun);
+			//----Bei Marani koennten wir etwas tun, hier nicht unbedingt
+		}
+		
+		//----Die verschiedenen Probleme rund um den Connect werden hier verarbeitet
+		setTimeout(function(){ parentThis._connectionHandler }, SMALLINTERVALL);	
+	}
+	
+	_processIncoming(){
+		parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
+	}
+	
 	connectMatrix(cb){
-        var host = this.config.host;
-        var port = this.config.port;
-        
+		this.log.info('connectMatrix():' + this.config.host + ':' + this.config.port);
+		 
         bQueryDone = false;
         bQueryInProgress=false;
-
-//        bQueryComplete_Routing = false;
-//        bQueryComplete_Input = false;
-//        bQueryComplete_Output = false;
-
-	
-        this.log.info('connectMatrix(): AudioMatrix: connecting to: ' + this.config.host + ':' + this.config.port);
 
         matrix = new net.Socket();
         matrix.connect(this.config.port, this.config.host, function() {
             clearInterval(query);
-            parentThis.log.info("connectMatrix(): sofort-Connect");
             parentThis._connect();
-            query = setInterval(function(){parentThis._connect()}, 10000);
+            //query = setInterval(function(){parentThis._connect()}, BIGINTERVALL);
 
             if(cb){
                 cb();
@@ -229,7 +330,8 @@ class AudiomatrixB2008 extends utils.Adapter {
         });
 
         matrix.on('data', function(chunk) {
-        	parentThis.log.info("matrix.onData(): " + parentThis.toHexString(chunk) );
+        	//parentThis.log.info("matrix.onData(): " + parentThis.toHexString(chunk) );
+        	parentThis._processIncoming(chunk);
 /*
             in_msg += parentThis.toHexString(chunk);
 
@@ -268,7 +370,7 @@ class AudiomatrixB2008 extends utils.Adapter {
             //if (e.code == "ENOTFOUND" || e.code == "ECONNREFUSED" || e.code == "ETIMEDOUT") {
             //            matrix.destroy();
             //}
-            parentThis.log.error('AudioMatrix TIMEOUT');
+            parentThis.log.error('AudioMatrix TIMEOUT. TBD');
             //parentThis.connection=false;
             //parentThis.setConnState(false, true);
 //            parentThis.reconnect();
@@ -284,13 +386,13 @@ class AudiomatrixB2008 extends utils.Adapter {
 
         matrix.on('close', function(e) {
             if(bConnection){
-                parentThis.log.error('AudioMatrix closed');
+                parentThis.log.error('AudioMatrix closed. TBD');
             }
             //parentThis.reconnect();
         });
 
         matrix.on('disconnect', function(e) {
-            parentThis.log.error('AudioMatrix disconnected');
+            parentThis.log.error('AudioMatrix disconnected. TBD');
 //            parentThis.reconnect();
         });
 
@@ -308,8 +410,8 @@ class AudiomatrixB2008 extends utils.Adapter {
 
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
-		this.log.info("config option1: " + this.config.option1);
-		this.log.info("config option2: " + this.config.option2);
+		//this.log.info("config option1: " + this.config.option1);
+		//this.log.info("config option2: " + this.config.option2);
 
 		this.log.info("Config Host:" + this.config.host);
 		this.log.info("Config Port:" + this.config.port);
