@@ -311,21 +311,22 @@ class AudiomatrixB2008 extends utils.Adapter {
 	_processIncoming(chunk){
 		parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
 		in_msg += parentThis.toHexString(chunk);
-		/*
+		
 		if(bWaitingForResponse==true){                                                                          
 			if((in_msg.length >= 20) && (in_msg.includes('5aa5'))){
 				var iStartPos = in_msg.indexOf('5aa5');
 				if(in_msg.toLowerCase().substring(iStartPos+16,iStartPos+18)=='0a'){                                                                                              
-					bWaitingForResponse = false;
-					var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+26);
-					parentThis.log.debug('AudioMatrix: matrix.on data(); filtered:' + tmpMSG);
-					parentThis.bWaitingForResponse = false;
-					parentThis.parseMsg(tmpMSG);
+//					bWaitingForResponse = false;
+					var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+20);	//Checksum
 					in_msg = '';
+					parentThis.log.info('_processIncoming(); filtered:' + tmpMSG);
+//					parentThis.bWaitingForResponse = false;
+//					parentThis.parseMsg(tmpMSG);
+					
 					lastCMD = '';
 					//iMaxTryCounter = 3;
-					iMaxTimeoutCounter = 0;
-					parentThis.processCMD();                        
+//					iMaxTimeoutCounter = 0;
+//					parentThis.processCMD();                        
 				}else{
 					//----Irgendwie vergniesgnaddelt
 					parentThis.log.info('AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:' + in_msg);                                                                                                   
@@ -334,7 +335,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		}else{
 			parentThis.log.info('AudioMatrix: matrix.on data(): incomming aber bWaitingForResponse==FALSE; in_msg:' + in_msg);
 		}
-		*/
+		
 		if(in_msg.length > 60){
 			//----Just in case
 			in_msg = '';
