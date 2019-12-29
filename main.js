@@ -25,6 +25,7 @@ var lastCMD;
 var in_msg = "";
 var parentThis;
 var cmdConnect =    new Buffer([0x5A, 0xA5, 0x14, 0x00, 0x40, 0x00, 0x00, 0x00, 0x0A, 0x5D]);
+var cmdPing = 		new Buffer([0x5A, 0xA5, 0x14, 0x01, 0x3F, 0x80, 0x00, 0x00, 0x0A, 0xDD]);
 var cmdBasicResponse = new Buffer([0x5A, 0xA5, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0x0A, 0xA9]);
 var cmdTransmissionDone = new Buffer([0x5A, 0xA5, 0xF1, 0xF1, 0xF1, 0xF1, 0xF1, 0xF1, 0x0A, 0xAF]);
 
@@ -91,14 +92,13 @@ class AudiomatrixB2008 extends utils.Adapter {
 	
 	pingMatrix(){
 		if(this.bConnection==true){
-			this.log.info('AudioMatrix: pingMatrix(). bConnection==true' );
+			//this.log.info('AudioMatrix: pingMatrix(). bConnection==true' );
+			arrCMD.push(cmdPing);
+//			iMaxTryCounter = 3;
+	        this.processCMD();
 		}else{
 		
 		}
-		
-//        arrCMD.push(cmdConnect);
-//        iMaxTryCounter = 3;
-//        this.processCMD();
 	}
 	
 	queryMatrix(){
