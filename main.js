@@ -344,7 +344,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 					in_msg = in_msg.slice(20);
 					parentThis.log.info('_processIncoming(); filtered:' + tmpMSG);
 //					parentThis.bWaitingForResponse = false;
-					parentThis.parseMsg(tmpMSG);
+					parentThis._parseMsg(tmpMSG);
 					
 					lastCMD = '';
 					//iMaxTryCounter = 3;
