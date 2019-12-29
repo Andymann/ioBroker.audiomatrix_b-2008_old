@@ -34,6 +34,7 @@ const MAXTRIES = 3;
 const PINGINTERVALL = 1000;
 const BIGINTERVALL = 10000;
 const SMALLINTERVALL = 333;
+const OFFLINETIMER = 2000;
 
 class AudiomatrixB2008 extends utils.Adapter {
 
@@ -146,7 +147,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			}
 		}else{
 			parentThis.log.debug('_connect().bConnection==true. Nichts tun);
-			//----Bei Marani koennten wir etwas tun, hier nicht unbedingt
+			//----Bei der 880er koennten wir etwas tun, hier nicht unbedingt
 		}
 		
 		//----Die verschiedenen Probleme rund um den Connect werden hier verarbeitet
@@ -308,7 +309,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         	parentThis.processCMD();
 		}else{
 			parentThis.log.debug("_connect().bConnection==true. Nichts tun");
-			//----Bei Marani koennten wir etwas tun, hier nicht unbedingt
+			//----Bei der 880er koennten wir etwas tun, hier nicht unbedingt
 		}
 		
 		//----Die verschiedenen Probleme rund um den Connect werden hier verarbeitet
@@ -333,19 +334,16 @@ class AudiomatrixB2008 extends utils.Adapter {
                 bHasIncomingData=false;
                 clearTimeout(query);
                 query = setTimeout(function() {
-                    //matrix.write(tmp);       
+                    //----Es ist ander als bei der 880er: 2 Sekunden keine Antwort und das Teil ist offline       
                     if(bHasIncomingData==false){
                     	//----Nach x Milisekunden ist noch gar nichts angekommen....
-                    	if(iMaxTryCounter>0){
-                    		iMaxTryCounter--;
-                    		parentThis.log.warn("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. iMaxTryCounter:" + iMaxTryCounter.toString() );
-                    	}else{
-                    		parentThis.log.error("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. OFFLINE?");
-                    	}
+                    	parentThis.log.error("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. OFFLINE?");
+                    	bWaitingForResponse=false;
+                    	parentThis.reconnect();
                     }else{
-                    	parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
+                    	//parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
                     }  
-                }, 1500);
+                }, OFFLINETIMER);
             }else{
                 this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
             }
