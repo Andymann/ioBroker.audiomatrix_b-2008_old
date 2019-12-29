@@ -279,7 +279,7 @@ class AudiomatrixB2008 extends utils.Adapter {
                 lastCMD = tmp;
                 setTimeout(function() {
                     matrix.write(tmp);           
-                }, 1);
+                }, 10);
             }else{
                 this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
             }
@@ -310,6 +310,35 @@ class AudiomatrixB2008 extends utils.Adapter {
 	
 	_processIncoming(chunk){
 		parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
+		in_msg += parentThis.toHexString(chunk);
+		/*
+		if(bWaitingForResponse==true){                                                                          
+			if((in_msg.length >= 20) && (in_msg.includes('5aa5'))){
+				var iStartPos = in_msg.indexOf('5aa5');
+				if(in_msg.toLowerCase().substring(iStartPos+16,iStartPos+18)=='0a'){                                                                                              
+					bWaitingForResponse = false;
+					var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+26);
+					parentThis.log.debug('AudioMatrix: matrix.on data(); filtered:' + tmpMSG);
+					parentThis.bWaitingForResponse = false;
+					parentThis.parseMsg(tmpMSG);
+					in_msg = '';
+					lastCMD = '';
+					//iMaxTryCounter = 3;
+					iMaxTimeoutCounter = 0;
+					parentThis.processCMD();                        
+				}else{
+					//----Irgendwie vergniesgnaddelt
+					parentThis.log.info('AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:' + in_msg);                                                                                                   
+				}                                                                                           
+			}
+		}else{
+			parentThis.log.info('AudioMatrix: matrix.on data(): incomming aber bWaitingForResponse==FALSE; in_msg:' + in_msg);
+		}
+		*/
+		if(in_msg.length > 60){
+			//----Just in case
+			in_msg = '';
+		}
 	}
 	
 	connectMatrix(cb){
@@ -332,38 +361,6 @@ class AudiomatrixB2008 extends utils.Adapter {
         matrix.on('data', function(chunk) {
         	//parentThis.log.info("matrix.onData(): " + parentThis.toHexString(chunk) );
         	parentThis._processIncoming(chunk);
-/*
-            in_msg += parentThis.toHexString(chunk);
-
-            if(bWaitingForResponse==true){                                                                          
-                if((in_msg.length >= 26) && (in_msg.includes('f0'))){
-                    //parentThis.log.debug('AudioMatrix: matrix.on data(); in_msg ist lang genug und enthaelt f0:' + in_msg);
-                    var iStartPos = in_msg.indexOf('f0');
-                    if(in_msg.toLowerCase().substring(iStartPos+24,iStartPos+26)=='f7'){                                                                                              
-                        bWaitingForResponse = false;
-                        var tmpMSG = in_msg.toLowerCase().substring(iStartPos,iStartPos+26);
-                        parentThis.log.debug('AudioMatrix: matrix.on data(); filtered:' + tmpMSG);
-                        parentThis.bWaitingForResponse = false;
-                        parentThis.parseMsg(tmpMSG);
-                        in_msg = '';
-                        lastCMD = '';
-                        //iMaxTryCounter = 3;
-                        iMaxTimeoutCounter = 0;
-                        parentThis.processCMD();                        
-                    }else{
-                        //----Irgendwie vergniesgnaddelt
-                        parentThis.log.info('AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:' + in_msg);                                                                                                   
-                    }                                                                                           
-                }
-            }else{
-                parentThis.log.info('AudioMatrix: matrix.on data(): incomming aber bWaitingForResponse==FALSE; in_msg:' + in_msg);
-            }
-
-            if(in_msg.length > 60){
-                //----Just in case
-                in_msg = '';
-            }
-*/
         });
 
         matrix.on('timeout', function(e) {
