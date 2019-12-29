@@ -12,11 +12,13 @@ const utils = require("@iobroker/adapter-core");
 // const fs = require("fs");
 var net = require('net');
 var matrix = null;
+var pingInterval = null;
 var query = null;
 var bConnection = false;
 var bWaitingForResponse = false;
 var bQueryDone = false;
 var bQueryInProgress=false;
+var bHasIncomingData=false;	//Irgendetwas kommt herein
 
 var iMaxTryCounter = 0;
 var iMaxTimeoutCounter = 0;
@@ -302,7 +304,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		if(bConnection==false){			
 	        parentThis.log.info('_connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
             arrCMD.push(cmdConnect);
-            iMaxTryCounter = MAXTRIES;
+            //iMaxTryCounter = MAXTRIES;
         	parentThis.processCMD();
 		}else{
 			parentThis.log.debug("_connect().bConnection==true. Nichts tun");
@@ -310,7 +312,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		}
 		
 		//----Die verschiedenen Probleme rund um den Connect werden hier verarbeitet
-		setTimeout(function(){ parentThis._connectionHandler }, SMALLINTERVALL);	
+		//setTimeout(function(){ parentThis._connectionHandler }, SMALLINTERVALL);	
 	}
 	
 	
@@ -326,9 +328,24 @@ class AudiomatrixB2008 extends utils.Adapter {
                 var tmp = arrCMD.shift();
                 this.log.info('processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
                 lastCMD = tmp;
-                setTimeout(function() {
-                    matrix.write(tmp);           
-                }, 10);
+                iMaxTryCounter = MAXTRIES;
+                matrix.write(tmp);  
+                bHasIncomingData=false;
+                clearTimeout(query);
+                query = setTimeout(function() {
+                    //matrix.write(tmp);       
+                    if(bHasIncomingData==false){
+                    	//----Nach x Milisekunden ist noch gar nichts angekommen....
+                    	if(iMaxTryCounter>0){
+                    		iMaxTryCounter--;
+                    		parentThis.log.warn("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. iMaxTryCounter:" + iMaxTryCounter.toString() );
+                    	}else{
+                    		parentThis.log.error("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. OFFLINE?");
+                    	}
+                    }else{
+                    	parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
+                    }  
+                }, 1500);
             }else{
                 this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
             }
@@ -343,7 +360,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	_processIncoming(chunk){
 		//parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
 		in_msg += parentThis.toHexString(chunk);
-		
+		bHasIncomingData=true;	// IrgendETWAS ist angekommen
 		if(bWaitingForResponse==true){                                                                          
 			if((in_msg.length >= 20) && (in_msg.includes('5aa5'))){
 				var iStartPos = in_msg.indexOf('5aa5');
@@ -395,7 +412,6 @@ class AudiomatrixB2008 extends utils.Adapter {
 			bQueryDone=true;
 			bQueryInProgress=false;
 			bWaitingForResponse=false;
-			//this.pingMatrix();
 		}else{
 			//--- TBD
 		}
@@ -411,10 +427,12 @@ class AudiomatrixB2008 extends utils.Adapter {
 
         matrix = new net.Socket();
         matrix.connect(this.config.port, this.config.host, function() {
-            clearInterval(query);
+            clearInterval(pingInterval);
             parentThis._connect();
             //query = setInterval(function(){parentThis._connect()}, BIGINTERVALL);
-			query = setInterval(function(){parentThis.pingMatrix()}, PINGINTERVALL);
+			pingInterval = setInterval(function(){parentThis.pingMatrix()}, PINGINTERVALL);
+			
+			
             if(cb){
                 cb();
             }                             
