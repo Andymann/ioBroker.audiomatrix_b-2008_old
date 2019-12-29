@@ -321,6 +321,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		Alle Befehle werden in arrCMD[] gespeichert. Die Methode arbeitet den naechsten Befehl ab.	
 	*/
 	processCMD(){
+		this.log.info("processCMD()");
 		if(!bWaitingForResponse){
             if(arrCMD.length>0){
                 this.log.debug('processCMD: bWaitingForResponse==FALSE, arrCMD.length=' +arrCMD.length.toString());
