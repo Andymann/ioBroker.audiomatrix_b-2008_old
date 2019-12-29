@@ -97,6 +97,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			arrCMD.push(cmdPing);
 //			iMaxTryCounter = 3;
 	        this.processCMD();
+	        bWaitingForResponse=false;
 		}else{
 		
 		}
