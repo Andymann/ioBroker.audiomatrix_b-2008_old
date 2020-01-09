@@ -509,17 +509,17 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----Ein State wurde veraendert
     changeMatrix(id, val, ack){
 
-        if (connection && val && !val.ack) {
+        //if (connection && val && !val.ack) {
             //this.log.info('matrixChanged: tabu=TRUE' );
             //tabu = true;
-        }
+        //}
         
         this.log.info('changeMatrix: ID:' + id.toString() );
         this.log.info('changeMatrix: VAL:' + val.toString() );
         this.log.info('changeMatrix: ACK:' + ack.toString() );
         
         if(ack==false){	//----Aenderung ueber die GUI
-        	
+        	this.log.info('changeMatrix: per GUI. ID:' + id.toString() );
         }
         
     }
