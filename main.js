@@ -340,6 +340,7 @@ class AudiomatrixB2008 extends utils.Adapter {
             arrCMD.push(cmdConnect);
             //iMaxTryCounter = MAXTRIES;
         	parentThis.processCMD();
+        	parentThis.setDate();
 		}else{
 			parentThis.log.debug("_connect().bConnection==true. Nichts tun");
 			//----Bei der 880er koennten wir etwas tun, hier nicht unbedingt
@@ -444,7 +445,6 @@ class AudiomatrixB2008 extends utils.Adapter {
 			bQueryDone=true;
 			bQueryInProgress=false;
 			bWaitingForResponse=false;
-			this.setDate();
 		}else{
 			//--- TBD
 		}
