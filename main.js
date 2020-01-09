@@ -31,6 +31,10 @@ var bQueryDone = false;
 var bQueryInProgress=false;
 var bHasIncomingData=false;	//Irgendetwas kommt herein
 
+//----Wir koennen einmalig nach einem erfolgreichen Connect etwas machen
+var bFirstPing = true;
+
+
 var iMaxTryCounter = 0;
 var iMaxTimeoutCounter = 0;
 var arrCMD = [];
@@ -127,9 +131,16 @@ class AudiomatrixB2008 extends utils.Adapter {
 		if(bConnection==true){
 			this.log.info('pingMatrix()' );
 			arrCMD.push(cmdConnect);
-//			iMaxTryCounter = 3;
 	        this.processCMD();
 	        //bWaitingForResponse=false;
+	        if(bFirstPing){
+	        	//----Ab jetzt nicht mehr
+	        	bFirstPing=false;
+	        	this.setDate();
+	        }
+	        
+	        
+	        
 		}else{
 		
 		}
@@ -340,7 +351,7 @@ class AudiomatrixB2008 extends utils.Adapter {
             arrCMD.push(cmdConnect);
             //iMaxTryCounter = MAXTRIES;
         	parentThis.processCMD();
-        	parentThis.setDate();
+        	
 		}else{
 			parentThis.log.debug("_connect().bConnection==true. Nichts tun");
 			//----Bei der 880er koennten wir etwas tun, hier nicht unbedingt
@@ -454,6 +465,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	connectMatrix(cb){
 		this.log.info('connectMatrix():' + this.config.host + ':' + this.config.port);
 		 
+		bFirstPing = true;
         bQueryDone=false;
         bQueryInProgress=false;
         bWaitingForResponse=false;
