@@ -30,6 +30,14 @@ var cmdConnect =    new Buffer([0x5A, 0xA5, 0x14, 0x00, 0x40, 0x00, 0x00, 0x00, 
 var cmdBasicResponse = new Buffer([0x5A, 0xA5, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0x0A, 0xA9]);
 var cmdTransmissionDone = new Buffer([0x5A, 0xA5, 0xF1, 0xF1, 0xF1, 0xF1, 0xF1, 0xF1, 0x0A, 0xAF]);
 
+var cmdVol100 = new Buffer([0x5A, 0xA5, 0x07, 0x00, 0x42, 0xC8, 0x00, 0x00, 0x0A, 0x1A]);
+var cmdVol075 = new Buffer([0x5A, 0xA5, 0x07, 0x00, 0x42, 0x96, 0x00, 0x00, 0x0A, 0xE8]);
+var cmdVol050 = new Buffer([0x5A, 0xA5, 0x07, 0x00, 0x42, 0x48, 0x00, 0x00, 0x0A, 0x9A]);
+var cmdVol025 = new Buffer([0x5A, 0xA5, 0x07, 0x00, 0x41, 0xC8, 0x00, 0x00, 0x0A, 0x19]);
+var cmdVol000 = new Buffer([0x5A, 0xA5, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
+
+
+
 const MAXTRIES = 3;
 const PINGINTERVALL = 1000;
 const BIGINTERVALL = 10000;
@@ -477,6 +485,43 @@ class AudiomatrixB2008 extends utils.Adapter {
             //parentThis.setConnState(false, true);                                            
         });
     }
+    
+    //----Aufruf aus onReady. Hier wird angelegt, was spaeter gesteuert werden kann
+    createStates(){
+    	await this.setObjectAsync('mainVolume', {
+                type: 'state',
+                common: {
+                name: 'Main Volume',
+                type: 'number',
+                role: 'level.volume',
+                read: true,
+                write: true,
+				desc: 'Main Volume',
+                min: 0,
+                max: 100
+            },
+            native: {},
+            });
+    
+    }
+    
+    //----Ein State wurde veraendert
+    changeMatrix(id, val, ack){
+
+        if (connection && val && !val.ack) {
+            //this.log.info('matrixChanged: tabu=TRUE' );
+            //tabu = true;
+        }
+        
+        this.log.info('changeMatrix: ID:' + id.toString() );
+        this.log.info('changeMatrix: VAL:' + val.toString() );
+        this.log.info('changeMatrix: ACK:' + ack.toString() );
+        
+        if(ack==false){	//----Aenderung ueber die GUI
+        	
+        }
+        
+    }
 
 	/**
 	 * Is called when databases are connected and adapter received configuration.
@@ -533,8 +578,13 @@ class AudiomatrixB2008 extends utils.Adapter {
 		this.log.info("check group user admin group admin: " + result);
 		
 		//----
+		this.createStates();
+		
+		//----
 		this.initMatrix();
 	}
+	
+	
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
@@ -573,6 +623,8 @@ class AudiomatrixB2008 extends utils.Adapter {
 		if (state) {
 			// The state was changed
 			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			
+			this.changeMatrix(id, state.val, state.ack);
 		} else {
 			// The state was deleted
 			this.log.info(`state ${id} deleted`);
