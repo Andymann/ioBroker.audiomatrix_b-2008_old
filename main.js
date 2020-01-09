@@ -615,7 +615,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	var tmpCMD = new Buffer([0x5A, 0xA5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5D]);
     	
     	var yyyy = new Date().getFullYear();
-    	var year = conv754(yyyy-1970);
+    	var year = conv754(yyyy/*-1970*/);
     	//----Jahr
     	tmpCMD[3] = 0x12;
     	tmpCMD[4] = year[0];
