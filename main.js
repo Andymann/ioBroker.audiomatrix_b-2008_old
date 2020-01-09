@@ -79,7 +79,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         }).join('')
     }
     
-    //----Hex-representing chars to array containing hex cvalues
+    //----Hex-representing chars to array containing hex values
     toArray(response){
         var chunks = [];
         for (var i = 0, charsLength = response.length; i < charsLength; i += 2) {
@@ -529,6 +529,8 @@ class AudiomatrixB2008 extends utils.Adapter {
 		parentThis.log.info(`Input value (${value}) => binary (${f32_bin}) [${f32_bin.length} bits] => float32 (${f32_bin_inverse})`);
 
 		parentThis.log.info('testConversion():' + f32_hex.toString() );
+		parentThis.log.info('testConversion() len:' + parentThis.toArray(f32_hex.toString()).length.toString() );
+		parentThis.log.info('testConversion() content:' + parentThis.toArray(f32_hex.toString())[0].toString() + '.'+ parentThis.toArray(f32_hex.toString())[1].toString() + '.'+ parentThis.toArray(f32_hex.toString())[2].toString() + '.'+ parentThis.toArray(f32_hex.toString())[3].toString() + '.' );
     }
     
     //----Ein State wurde veraendert
