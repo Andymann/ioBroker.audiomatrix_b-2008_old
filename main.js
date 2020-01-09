@@ -11,6 +11,8 @@ const utils = require("@iobroker/adapter-core");
 //----https://gist.github.com/Jozo132/2c0fae763f5dc6635a6714bb741d152f
 const Float32ToHex = float32 => { const getHex = i => ('00' + i.toString(16)).slice(-2); var view = new DataView(new ArrayBuffer(4)); view.setFloat32(0, float32); return Array.apply(null, { length: 4 }).map((_, i) => getHex(view.getUint8(i))).join(''); }
 const Float32ToBin = float32 => parseInt(Float32ToHex(float32), 16).toString(2).padStart(32, '0');
+const conv754 = float32 => { const getHex = i => (parseInt(('00' + i.toString(16)).slice(-2),16)); var view = new DataView(new ArrayBuffer(4)); view.setFloat32(0, float32); return Array.apply(null, { length: 4 }).map((_, i) => getHex(view.getUint8(i))); }
+
 
 const ToFloat32 = num => { if (num > 0 || num < 0) { var sign = (num >>> 31) ? -1 : 1; var exp = (num >>> 23 & 0xff) - 127; var mantissa = ((num & 0x7fffff) + 0x800000).toString(2); var float32 = 0; for (var i = 0; i < mantissa.length; i += 1) { float32 += parseInt(mantissa[i]) ? Math.pow(2, exp) : 0; exp-- } return float32 * sign; } else return 0 }
 const HexToFloat32 = str => ToFloat32(parseInt(str, 16));
@@ -556,6 +558,15 @@ class AudiomatrixB2008 extends utils.Adapter {
     
     _changeMainVolume(val){
     	this.log.info('changeMainVolume: VAL:' + val.toString() );
+    	arrVal = conv754(val);
+    	const tempCMD = cmdVol000.slice();
+    	tmpCMD[4] = arrVal[0];
+    	tmpCMD[5] = arrVal[1];
+    	tmpCMD[6] = arrVal[2];
+    	tmpCMD[7] = arrVal[3];
+    	arrCMD.push(tmpCMD);
+        parentThis.processCMD();
+    	/*
     	if(val==0){
     		this.log.info('changeMainVolume: fix 0' );
     		arrCMD.push(cmdVol000);
@@ -579,6 +590,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     	}else{
     		this.log.info('changeMainVolume: Wert kann nicht verarbeitet werden.' );
     	}
+    	*/
+    	
     }
 
 	/**
