@@ -559,7 +559,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     _changeMainVolume(val){
     	this.log.info('changeMainVolume: VAL:' + val.toString() );
     	var arrVal = conv754(val);
-    	const tempCMD = cmdVol000.slice();
+    	var tempCMD = cmdVol000.slice();
     	tmpCMD[4] = arrVal[0];
     	tmpCMD[5] = arrVal[1];
     	tmpCMD[6] = arrVal[2];
