@@ -528,6 +528,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		parentThis.log.info(`Input value (${value}) => hex (${f32_hex}) [${Math.ceil(f32_hex.length / 2)} bytes] => float32 (${f32_bin_inverse})`);
 		parentThis.log.info(`Input value (${value}) => binary (${f32_bin}) [${f32_bin.length} bits] => float32 (${f32_bin_inverse})`);
 
+		parentThis.log.info('testConversion():' + f32_hex.toString() );
     }
     
     //----Ein State wurde veraendert
