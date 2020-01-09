@@ -520,7 +520,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         
         if(ack==false){	//----Aenderung ueber die GUI
         	//this.log.info('changeMatrix: per GUI. ID:' + id.toString() );
-        	if(id.str.toUpperCase().endsWith('MAINVOLUME')){
+        	if(id.toUpperCase().endsWith('MAINVOLUME')){
         		this._changeMainVolume(val);
         	}
         	
