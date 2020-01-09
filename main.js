@@ -90,6 +90,20 @@ class AudiomatrixB2008 extends utils.Adapter {
         return chunks;
     }
 
+	//----Gibt den Array mit korrekter Checksumme zurueck
+	convertArray(array){
+		var tmpArr = array.slice();
+
+		var tmpChk =0;
+		for(var i=0; i<array.length-1; i++){
+			tmpChk+=array[i];
+		}
+		tmpChk=tmpChk & 0xFF;
+		tmpArr[tmpArr.length-1]=tmpChk;
+		return tmpArr;
+	}
+
+	
 	compareArray(pArr1, pArr2){
 		bReturn = false;
 		if(pArr1.length==pArr2.length){
@@ -560,10 +574,15 @@ class AudiomatrixB2008 extends utils.Adapter {
     	this.log.info('changeMainVolume: VAL:' + val.toString() );
     	var arrVal = conv754(val);
     	var tmpCMD = cmdVol000.slice();
+    	var tmpChecksum = 0;
     	tmpCMD[4] = arrVal[0];
     	tmpCMD[5] = arrVal[1];
     	tmpCMD[6] = arrVal[2];
     	tmpCMD[7] = arrVal[3];
+    	
+    	//----Checksumme korrigieren
+    	tmCMD = this.convertArray(tmpCMD);
+    	
     	arrCMD.push(tmpCMD);
         parentThis.processCMD();
     	/*
