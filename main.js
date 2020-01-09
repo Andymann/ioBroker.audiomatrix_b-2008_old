@@ -590,11 +590,11 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----Sendet die Befehle zum Setzen des korrekten Datums an die Matrix
     setDate(){
     	this.log.info('setDate()');
-    	_setHardwareDate_year();
-    	_setHardwareDate_month();
-    	_setHardwareDate_day();
-    	_setHardwareDate_hour();
-    	_setHardwareDate_minute();
+    	this._setHardwareDate_year();
+    	this._setHardwareDate_month();
+    	this._setHardwareDate_day();
+    	this._setHardwareDate_hour();
+    	this._setHardwareDate_minute();
     }
     
     
