@@ -390,9 +390,10 @@ class AudiomatrixB2008 extends utils.Adapter {
                     	//parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
                     }  
                 }, OFFLINETIMER);
-            }else{
-                this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
             }
+            //else{
+            //    this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
+            //}
         }else{
             this.log.info('AudioMatrix: processCMD: bWaitingForResponse==TRUE. Nichts machen');
         }
