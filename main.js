@@ -520,6 +520,11 @@ class AudiomatrixB2008 extends utils.Adapter {
 		var f32_hex = Float32ToHex(value); // JS number   =>   HEX string of a Float32 standard number 
 		var f32_hex_inverse = HexToFloat32(f32_hex); // HEX string of a Float32 standard number   =>   JS number
 		
+		// FLOAT32 <===> BIN
+		var f32_bin = Float32ToBin(value); // JS number   =>   HEX string of a Float32 standard number 
+		var f32_bin_inverse = BinToFloat32(f32_bin); // HEX string of a Float32 standard number   =>   JS number
+
+
 		parentThis.log.info(`Input value (${value}) => hex (${f32_hex}) [${Math.ceil(f32_hex.length / 2)} bytes] => float32 (${f32_bin_inverse})`);
 		parentThis.log.info(`Input value (${value}) => binary (${f32_bin}) [${f32_bin.length} bits] => float32 (${f32_bin_inverse})`);
 
