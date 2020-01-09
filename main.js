@@ -607,6 +607,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	this._setHardwareDate_day();
     	this._setHardwareDate_hour();
     	this._setHardwareDate_minute();
+    	parentThis.processCMD(); 	
     }
     
     
@@ -626,7 +627,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	
     	arrCMD.push(tmpCMD);
-        parentThis.processCMD(); 	
+        //parentThis.processCMD(); 	
     }
     
     _setHardwareDate_month(){
@@ -645,7 +646,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	
     	arrCMD.push(tmpCMD);
-        parentThis.processCMD(); 	
+        //parentThis.processCMD(); 	
     }
     
     _setHardwareDate_day(){
@@ -664,7 +665,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	
     	arrCMD.push(tmpCMD);
-        parentThis.processCMD(); 	
+        //parentThis.processCMD(); 	
     }
     
     _setHardwareDate_hour(){
@@ -683,7 +684,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	
     	arrCMD.push(tmpCMD);
-        parentThis.processCMD(); 	
+        //parentThis.processCMD(); 	
     }
     
     _setHardwareDate_minute(){
@@ -702,7 +703,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	
     	arrCMD.push(tmpCMD);
-        parentThis.processCMD(); 	
+        //parentThis.processCMD(); 	
     }
 
 	/**
