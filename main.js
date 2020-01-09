@@ -137,14 +137,14 @@ class AudiomatrixB2008 extends utils.Adapter {
 	        	//----Ab jetzt nicht mehr
 	        	bFirstPing=false;
 	        	this.setDate();
-	        	this._changeRouting(1, 1, true);
-	        	this._changeRouting(2, 2, true);
-	        	this._changeRouting(3, 3, true);
-	        	this._changeRouting(4, 4, true);
+	        	//this._changeRouting(1, 1, true);
+	        	//this._changeRouting(2, 2, true);
+	        	//this._changeRouting(3, 3, true);
+	        	//this._changeRouting(4, 4, true);
 	        	this._changeRouting(5, 5, true);
-	        	this._changeRouting(6, 6, true);
-	        	this._changeRouting(7, 7, true);
-	        	this._changeRouting(8, 8, true);
+	        	//this._changeRouting(6, 6, true);
+	        	//this._changeRouting(7, 7, true);
+	        	//this._changeRouting(8, 8, true);
 	        }
 	                
 		}else{
