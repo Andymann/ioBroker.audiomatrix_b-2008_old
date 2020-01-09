@@ -446,6 +446,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		}
 	}
 	
+	//----Daten komen von der HArdware an
 	_parseMSG(sMSG){
 		this.log.info("_parseMSG():" + sMSG);
 		if( sMSG===this.toHexString(cmdBasicResponse) ){
@@ -457,6 +458,9 @@ class AudiomatrixB2008 extends utils.Adapter {
 			bQueryDone=true;
 			bQueryInProgress=false;
 			bWaitingForResponse=false;
+		}else if(sMSG.startsWith('5AA50700')){
+			this.log.info("_parseMSG(): Main Volume from Matrix.");
+			
 		}else{
 			//--- TBD
 		}
