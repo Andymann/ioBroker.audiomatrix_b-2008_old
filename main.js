@@ -368,7 +368,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	processCMD(){
 		//this.log.info("processCMD()");
 		if(bWaitingForResponse==false){
-			if(arrCMD.length>0){
+			while(arrCMD.length>0){
                 //this.log.info('processCMD: bWaitingForResponse==FALSE, arrCMD.length=' +arrCMD.length.toString());
                 bWaitingForResponse=true;
                 var tmp = arrCMD.shift();
