@@ -487,7 +487,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     }
     
     //----Aufruf aus onReady. Hier wird angelegt, was spaeter gesteuert werden kann
-    createStates(){
+    async createStates(){
     	parentThis.log.info('createStates(): mainVolume');
     	await this.setObjectAsync('mainVolume', {
                 type: 'state',
