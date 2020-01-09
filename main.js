@@ -488,6 +488,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     
     //----Aufruf aus onReady. Hier wird angelegt, was spaeter gesteuert werden kann
     createStates(){
+    	this.log.info('createStates(): mainVolume'');
     	await this.setObjectAsync('mainVolume', {
                 type: 'state',
                 common: {
@@ -552,6 +553,9 @@ class AudiomatrixB2008 extends utils.Adapter {
 			},
 			native: {},
 		});
+		
+		//----
+		this.createStates();
 
 		// in this template all states changes inside the adapters namespace are subscribed
 		this.subscribeStates("*");
@@ -577,8 +581,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		result = await this.checkGroupAsync("admin", "admin");
 		this.log.info("check group user admin group admin: " + result);
 		
-		//----
-		this.createStates();
+		
 		
 		//----
 		this.initMatrix();
