@@ -444,6 +444,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			bQueryDone=true;
 			bQueryInProgress=false;
 			bWaitingForResponse=false;
+			this.setDate();
 		}else{
 			//--- TBD
 		}
@@ -574,7 +575,6 @@ class AudiomatrixB2008 extends utils.Adapter {
     	this.log.info('changeMainVolume: VAL:' + val.toString() );
     	var arrVal = conv754(val);
     	var tmpCMD = cmdVol000.slice();
-    	var tmpChecksum = 0;
     	tmpCMD[4] = arrVal[0];
     	tmpCMD[5] = arrVal[1];
     	tmpCMD[6] = arrVal[2];
@@ -584,33 +584,113 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	
     	arrCMD.push(tmpCMD);
-        parentThis.processCMD();
-    	/*
-    	if(val==0){
-    		this.log.info('changeMainVolume: fix 0' );
-    		arrCMD.push(cmdVol000);
-        	parentThis.processCMD();
-    	}else if(val==25){
-    		this.log.info('changeMainVolume: fix 25' );
-    		arrCMD.push(cmdVol025);
-        	parentThis.processCMD();
-    	}else if(val==50){
-    		this.log.info('changeMainVolume: fix 50');
-    		arrCMD.push(cmdVol050);
-        	parentThis.processCMD();
-    	}else if(val==75){
-    		this.log.info('changeMainVolume: fix 75' );
-    		arrCMD.push(cmdVol075);
-        	parentThis.processCMD();
-    	}else if(val==100){
-    		this.log.info('changeMainVolume: fix 100' );
-    		arrCMD.push(cmdVol100);
-        	parentThis.processCMD();
-    	}else{
-    		this.log.info('changeMainVolume: Wert kann nicht verarbeitet werden.' );
-    	}
-    	*/
+        parentThis.processCMD(); 	
+    }
+    
+    //----Sendet die Befehle zum Setzen des korrekten Datums an die Matrix
+    setDate(){
+    	this.log.info('setDate()');
+    	_setHardwareDate_year();
+    	_setHardwareDate_month();
+    	_setHardwareDate_day();
+    	_setHardwareDate_hour();
+    	_setHardwareDate_minute();
+    }
+    
+    
+    _setHardwareDate_year(){
+    	var tmpCMD = new Buffer([0x5A, 0xA5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5D]);
     	
+    	var yyyy = new Date().getFullYear();
+    	var year = conv754(yyyy-1970);
+    	//----Jahr
+    	tmpCMD[3] = 0x12;
+    	tmpCMD[4] = year[0];
+    	tmpCMD[5] = year[1];
+    	tmpCMD[6] = year[2];
+    	tmpCMD[7] = year[3];
+    	
+    	//----Checksumme korrigieren
+    	tmpCMD = this.convertArray(tmpCMD);
+    	
+    	arrCMD.push(tmpCMD);
+        parentThis.processCMD(); 	
+    }
+    
+    _setHardwareDate_month(){
+    	var tmpCMD = new Buffer([0x5A, 0xA5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5D]);
+    	
+    	var mm = new Date().getMonth() + 1;
+    	var month = conv754(mm);
+    	//----Jahr
+    	tmpCMD[3] = 0x13;
+    	tmpCMD[4] = month[0];
+    	tmpCMD[5] = month[1];
+    	tmpCMD[6] = month[2];
+    	tmpCMD[7] = month[3];
+    	
+    	//----Checksumme korrigieren
+    	tmpCMD = this.convertArray(tmpCMD);
+    	
+    	arrCMD.push(tmpCMD);
+        parentThis.processCMD(); 	
+    }
+    
+    _setHardwareDate_day(){
+    	var tmpCMD = new Buffer([0x5A, 0xA5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5D]);
+    	
+    	var dd = new Date().getDate();
+    	var day = conv754(dd);
+    	//----Jahr
+    	tmpCMD[3] = 0x14;
+    	tmpCMD[4] = day[0];
+    	tmpCMD[5] = day[1];
+    	tmpCMD[6] = day[2];
+    	tmpCMD[7] = day[3];
+    	
+    	//----Checksumme korrigieren
+    	tmpCMD = this.convertArray(tmpCMD);
+    	
+    	arrCMD.push(tmpCMD);
+        parentThis.processCMD(); 	
+    }
+    
+    _setHardwareDate_hour(){
+    	var tmpCMD = new Buffer([0x5A, 0xA5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5D]);
+    	
+    	var hh = new Date().getHours();
+    	var hour = conv754(hh);
+    	//----Jahr
+    	tmpCMD[3] = 0x15;
+    	tmpCMD[4] = hour[0];
+    	tmpCMD[5] = hour[1];
+    	tmpCMD[6] = hour[2];
+    	tmpCMD[7] = hour[3];
+    	
+    	//----Checksumme korrigieren
+    	tmpCMD = this.convertArray(tmpCMD);
+    	
+    	arrCMD.push(tmpCMD);
+        parentThis.processCMD(); 	
+    }
+    
+    _setHardwareDate_minute(){
+    	var tmpCMD = new Buffer([0x5A, 0xA5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5D]);
+    	
+    	var mm = new Date().getMinutes();
+    	var minute = conv754(mm);
+    	//----Jahr
+    	tmpCMD[3] = 0x16;
+    	tmpCMD[4] = minute[0];
+    	tmpCMD[5] = minute[1];
+    	tmpCMD[6] = minute[2];
+    	tmpCMD[7] = minute[3];
+    	
+    	//----Checksumme korrigieren
+    	tmpCMD = this.convertArray(tmpCMD);
+    	
+    	arrCMD.push(tmpCMD);
+        parentThis.processCMD(); 	
     }
 
 	/**
