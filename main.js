@@ -519,9 +519,39 @@ class AudiomatrixB2008 extends utils.Adapter {
         this.log.info('changeMatrix: ACK:' + ack.toString() );
         
         if(ack==false){	//----Aenderung ueber die GUI
-        	this.log.info('changeMatrix: per GUI. ID:' + id.toString() );
-        }
-        
+        	//this.log.info('changeMatrix: per GUI. ID:' + id.toString() );
+        	if(id.str.toUpperCase().endsWith('MAINVOLUME')){
+        		this._changeMainVolume(val);
+        	}
+        	
+        }        
+    }
+    
+    _changeMainVolume(val){
+    	this.log.info('changeMainVolume: VAL:' + val.toString() );
+    	if(val==0){
+    		this.log.info('changeMainVolume: fix 0' );
+    		arrCMD.push(cmdVol000);
+        	parentThis.processCMD();
+    	}else if(val==25){
+    		this.log.info('changeMainVolume: fix 25' );
+    		arrCMD.push(cmdVol025);
+        	parentThis.processCMD();
+    	}else if(val==50){
+    		this.log.info('changeMainVolume: fix 50');
+    		arrCMD.push(cmdVol050);
+        	parentThis.processCMD();
+    	}else if(val==75){
+    		this.log.info('changeMainVolume: fix 75' );
+    		arrCMD.push(cmdVol075);
+        	parentThis.processCMD();
+    	}else if(val==100){
+    		this.log.info('changeMainVolume: fix 100' );
+    		arrCMD.push(cmdVol100);
+        	parentThis.processCMD();
+    	}else{
+    		this.log.info('changeMainVolume: Wert kann nicht verarbeitet werden.' );
+    	}
     }
 
 	/**
