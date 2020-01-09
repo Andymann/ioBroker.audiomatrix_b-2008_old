@@ -160,6 +160,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	
 	reconnect(){
 		this.log.info('AudioMatrix: reconnectMatrix(). TBD');
+//		bFirstPing=true;		
 //        bConnection = false;
 //        clearInterval(query);
 //        clearTimeout(recnt);
@@ -171,174 +172,6 @@ class AudiomatrixB2008 extends utils.Adapter {
 //        recnt = setTimeout(function() {
 //            parentThis.initmatrix();
 //        }, 15000);
-	}
-	
-	
-	/*
-		Die Untermethode zum Abbilden der Funktionen aus connect(). Es geht darum, den Code ingesamt lesbarer zu machen.
-	*/
-	/*
-	_connect(){
-		this.log.info("_connect()");
-		if(!bConnection){
-			if(bWaitingForResponse==false){
-	            parentThis.log.info('_connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
-        	    arrCMD.push(cmdConnect);
-        	    iMaxTryCounter = MAXTRIES;
-        	    parentThis.processCMD();
-			}else{
-				parentThis.log.info('_connect().bConnection==false, bWaitingForResponse==true; nichts machen. Wir warten auf Antwort.');
-			}
-		}else{
-			parentThis.log.debug('_connect().bConnection==true. Nichts tun);
-			//----Bei der 880er koennten wir etwas tun, hier nicht unbedingt
-		}
-		
-		//----Die verschiedenen Probleme rund um den Connect werden hier verarbeitet
-		setTimeout(function(){ parentThis._connectionHandler }, SMALLINTERVALL);
-	
-	}
-	*/
-	
-	
-	/*
-		Unterfunktion zur Abbildung aller Situationen, die wahrend des Connects auftreten koennen.
-		Was passiert z.B., wenn die Matrix nicht reagiert, etc.
-	*/
-	/*
-	_connectionHandler(){
-		if(bWaitingForResponse==true){
-			if(bQueryInProgress==false){
-				if(iMaxTryCounter>0){
-					//----Es kann passieren, dass man direkt NACH dem Senden eines Befehls an die Matrix und VOR der Antwort hier landet.
-					//----deswegen wird erstmal der MaxTryCounter heruntergesetzt und -sofern nichts kommt- bis zum naechsten Timeout gewartet.
-					//----Wenn iMaxTryCounter==0 ist, koennen wir von einem Problem ausgehen
-					parentThis.log.info('_connectionHandler(): kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==' + iMaxTryCounter.toString() );
-					parentThis.log.info('_connectionHandler(): kleines Timeout. lastCMD =' + parentThis.toHexString(lastCMD) + ' nichts tun, noch warten');
-					iMaxTryCounter--;   
-//					parentThis.setState('minorProblem', true, true);
-				}else{
-					if(iMaxTimeoutCounter<3){
-						parentThis.log.info('_connectionHandler() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD));
-						iMaxTimeoutCounter++;
-						iMaxTryCounter=3;
-						if(lastCMD !== undefined){
-							setTimeout(function() {
-								matrix.write(lastCMD);            
-							}, 100);
-						}
-					}else{
-						parentThis.log.error('_connectionHandler() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD) + 'schlug mehrfach fehl');
-						iMaxTimeoutCounter=0;
-						parentThis.log.error('_connectionHandler() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0');
-						//parentThis.log.error('WIE reagieren wir hier drauf? Was ist, wenn ein Befehl nicht umgesetzt werden konnte?');
-						bWaitingForResponse=false;
-						lastCMD = '';
-						in_msg = '';
-						arrCMD = [];
-						parentThis.reconnect();
-					}
-				}
-			}else{
-//				parentThis.setState('minorProblem', true, true);
-				if(bConnection==true){
-					parentThis.log.info('_connectionHandler(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE, bConnection==TRUE. Abwarten. iMaxTryCounter==' + iMaxTryCounter.toString() );
-				}else{
-					//----Fuer den Fall, dass der Verbindungsversuch fehlschlaegt
-					parentThis.log.info('_connectionHandler(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE. bConnection==FALSE. iMaxTryCounter==' + iMaxTryCounter.toString() );
-					bWaitingForResponse=false;
-					iMaxTryCounter--;
-				}
-			}
-		}else{
-			parentThis.log.info('_connectionHandler(): bWaitingForResponse==FALSE, kein Problem');
-		}
-	}
-	*/
-	 x_connect(){
-		this.log.info("_connect()");
-//                if(!tabu){             //----Damit nicht gepolled wird, wenn gerade etwas anderes stattfindet.
-                    if(bConnection==false){
-						if(bWaitingForResponse==false){
-	                        parentThis.log.info('AudioMatrix: _connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
-        	                arrCMD.push(cmdConnect);
-        	                iMaxTryCounter = 3;
-        	                parentThis.processCMD();
-						}else{
-							parentThis.log.info('AudioMatrix: _connect().connection==false, bWaitingForResponse==false; nichts machen');
-						}
-                    }else{
-                        if(bQueryDone==true){
-                            if(arrCMD.length==0){
-	                    	    parentThis.log.debug('AudioMatrix: _connect().connection==true, bQueryDone==TRUE, idle, pinging Matrix');
-        	                	parentThis.pingMatrix();                                                                                                          
-                            }else{
-                                parentThis.log.debug('AudioMatrix: _connect().connection==true, bQueryDone==TRUE, arrCMD.length>0; idle, aber KEIN ping auf Matrix');
-                            }
-                        }else{
-                            if(bQueryInProgress==false){
-                                parentThis.log.debug('AudioMatrix: _connect().connection==true, bQueryDone==FALSE, idle, query Matrix');                            
-                                parentThis.queryMatrix();
-                            }
-                        }                                                                                           
-                    }
-
-                    //----Intervall fuer Befehle, Timeouts, etc
-                    setTimeout(function(){
-                        //parentThis.log.info('AudioMatrix: connectMatrix(): kleines Timeout');
-                        if(bWaitingForResponse==true){
-                            if(bQueryInProgress==false){
-								if(iMaxTryCounter>0){
-									//----Es kann passieren, dass man direkt NACH dem Senden eines Befehls an die Matrix und VOR der Antwort hier landet.
-									//----deswegen wird erstmal der MaxTryCounter heruntergesetzt und -sofern nichts kommt- bis zum naechsten Timeout gewartet.
-									//----Wenn iMaxTryCounter==0 ist, koennen wir von einem Problem ausgehen
-									parentThis.log.info('AudioMatrix: _connect(): kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==' + iMaxTryCounter.toString() );
-									parentThis.log.info('AudioMatrix: _connect(): kleines Timeout. lastCMD =' + parentThis.toHexString(lastCMD) + ' nichts tun, noch warten');
-									iMaxTryCounter--;   
-//									parentThis.setState('minorProblem', true, true);
-								}else{
-									if(iMaxTimeoutCounter<3){
-										parentThis.log.info('AudioMatrix: _connect() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD));
-										iMaxTimeoutCounter++;
-										iMaxTryCounter=3;
-										if(lastCMD !== undefined){
-											setTimeout(function() {
-												matrix.write(lastCMD);            
-											}, 100);
-										}
-									}else{
-										parentThis.log.error('AudioMatrix: _connect() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0. Erneutes Senden von ' + parentThis.toHexString(lastCMD) + 'schlug mehrfach fehl');
-										iMaxTimeoutCounter=0;
-										parentThis.log.error('AudioMatrix: _connect() in_msg: kleines Timeout. bWaitingForResponse==TRUE iMaxTryCounter==0');
-										//parentThis.log.error('WIE reagieren wir hier drauf? Was ist, wenn ein Befehl nicht umgesetzt werden konnte?');
-										bWaitingForResponse=false;
-										lastCMD = '';
-										in_msg = '';
-										arrCMD = [];
-										parentThis.reconnect();
-									}
-								}
-                            }else{
-//								parentThis.setState('minorProblem', true, true);
-								if(bConnection==true){
-                                    parentThis.log.info('AudioMatrix: _connect(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE. Abwarten. iMaxTryCounter==' + iMaxTryCounter.toString() );
-                                }else{
-                                    //----Fuer den Fall, dass der Verbindungsversuch fehlschlaegt
-                                    parentThis.log.info('AudioMatrix: _connect(): kleines Timeout. bWaitingForResponse==TRUE, bQueryInProgress==TRUE. Connection==FALSE. iMaxTryCounter==' + iMaxTryCounter.toString() );
-				    				bWaitingForResponse=false;
-                                    iMaxTryCounter--;
-                                }
-                            }
-                        }else{
-                            //parentThis.log.debug('AudioMatrix: connectMatrix() in_msg: kleines Timeout. bWaitingForResponse==FALSE, kein Problem');
-                        }
-                    }, SMALLINTERVALL);
-
-//                }else{
-//                    parentThis.log.debug('AudioMatrix: connectMatrix().Im Ping-Intervall aber tabu==TRUE. Nichts machen.');
-//                }
-            
-		return;
 	}
 	
 	
@@ -459,8 +292,9 @@ class AudiomatrixB2008 extends utils.Adapter {
 			bQueryInProgress=false;
 			bWaitingForResponse=false;
 		}else if(sMSG.startsWith('5aa50700')){
-			this.log.info("_parseMSG(): Main Volume from Matrix.");
-			
+			this.log.info("_parseMSG(): received main volume from Matrix.");
+//			this.setStateAsync('mainVolume', { val: XXX, ack: true });
+    
 			
 		}else{
 			//--- TBD
@@ -548,6 +382,7 @@ class AudiomatrixB2008 extends utils.Adapter {
             native: {},
             });
     }
+    
     
     testConversion(){
     	var value = 100; // JS number variable
