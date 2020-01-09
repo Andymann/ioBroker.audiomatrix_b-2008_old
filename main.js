@@ -51,7 +51,7 @@ var cmdVol050 = new Buffer([0x5A, 0xA5, 0x07, 0x00, 0x42, 0x48, 0x00, 0x00, 0x0A
 var cmdVol025 = new Buffer([0x5A, 0xA5, 0x07, 0x00, 0x41, 0xC8, 0x00, 0x00, 0x0A, 0x19]);
 var cmdVol000 = new Buffer([0x5A, 0xA5, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
 
-
+var cmdRouting = new Buffer([0x5A, 0xA5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
 
 const MAXTRIES = 3;
 const PINGINTERVALL = 1000;
@@ -137,10 +137,16 @@ class AudiomatrixB2008 extends utils.Adapter {
 	        	//----Ab jetzt nicht mehr
 	        	bFirstPing=false;
 	        	this.setDate();
+	        	this._changeRouting(1, 1, true);
+	        	this._changeRouting(1, 2, true);
+	        	this._changeRouting(1, 3, true);
+	        	this._changeRouting(1, 4, true);
+	        	this._changeRouting(1, 5, true);
+	        	this._changeRouting(1, 6, true);
+	        	this._changeRouting(1, 7, true);
+	        	this._changeRouting(1, 8, true);
 	        }
-	        
-	        
-	        
+	                
 		}else{
 		
 		}
@@ -438,6 +444,29 @@ class AudiomatrixB2008 extends utils.Adapter {
     	
     	arrCMD.push(tmpCMD);
         parentThis.processCMD(); 	
+    }
+    
+    //----IN: 1-6
+    //----OUT:1-8
+    //----pOnOff: TRUE / FALSE
+    _changeRouting(pIn, pOut, pOnOff){
+    	this.og.info('changeRouting: In:' + pIn.toString() + ' Out:' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
+    	var tmpCMD = cmdRouting.slice();
+    	var i = pOnOff ? 1 : 0;
+    	var onOff = conv754(i);
+    	
+    	tmpCMD[2] = pIn;
+    	tmpCMD[3] = tmpOut + 50;
+    	tmpCMD[4] = onOff[0];
+    	tmpCMD[5] = onOff[1];
+    	tmpCMD[6] = onOff[2];
+    	tmpCMD[7] = onOff[3];
+    	
+    	//----Checksumme korrigieren
+    	tmpCMD = this.convertArray(tmpCMD);
+    	
+    	arrCMD.push(tmpCMD);
+        parentThis.processCMD(); 
     }
     
     //----Sendet die Befehle zum Setzen des korrekten Datums an die Matrix
