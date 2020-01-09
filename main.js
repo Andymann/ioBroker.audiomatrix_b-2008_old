@@ -8,6 +8,15 @@
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
 
+//----https://gist.github.com/Jozo132/2c0fae763f5dc6635a6714bb741d152f
+const Float32ToHex = float32 => { const getHex = i => ('00' + i.toString(16)).slice(-2); var view = new DataView(new ArrayBuffer(4)); view.setFloat32(0, float32); return Array.apply(null, { length: 4 }).map((_, i) => getHex(view.getUint8(i))).join(''); }
+const Float32ToBin = float32 => parseInt(Float32ToHex(float32), 16).toString(2).padStart(32, '0');
+
+const ToFloat32 = num => { if (num > 0 || num < 0) { var sign = (num >>> 31) ? -1 : 1; var exp = (num >>> 23 & 0xff) - 127; var mantissa = ((num & 0x7fffff) + 0x800000).toString(2); var float32 = 0; for (i = 0; i < mantissa.length; i += 1) { float32 += parseInt(mantissa[i]) ? Math.pow(2, exp) : 0; exp-- } return float32 * sign; } else return 0 }
+const HexToFloat32 = str => ToFloat32(parseInt(str, 16));
+const BinToFloat32 = str => ToFloat32(parseInt(str, 2));
+
+
 // Load your modules here, e.g.:
 // const fs = require("fs");
 var net = require('net');
@@ -503,7 +512,17 @@ class AudiomatrixB2008 extends utils.Adapter {
             },
             native: {},
             });
+    }
     
+    testConversion(){
+    	var value = 100; // JS number variable
+    	// FLOAT32 <===> HEX
+		var f32_hex = Float32ToHex(value); // JS number   =>   HEX string of a Float32 standard number 
+		var f32_hex_inverse = HexToFloat32(f32_hex); // HEX string of a Float32 standard number   =>   JS number
+		
+		parentThis.log.info(`Input value (${value}) => hex (${f32_hex}) [${Math.ceil(f32_hex.length / 2)} bytes] => float32 (${f32_bin_inverse})`);
+		parentThis.log.info(`Input value (${value}) => binary (${f32_bin}) [${f32_bin.length} bits] => float32 (${f32_bin_inverse})`);
+
     }
     
     //----Ein State wurde veraendert
@@ -587,6 +606,9 @@ class AudiomatrixB2008 extends utils.Adapter {
 		//----
 		this.createStates();
 
+		this.testConversion();
+		
+		
 		// in this template all states changes inside the adapters namespace are subscribed
 		this.subscribeStates("*");
 
