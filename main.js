@@ -581,7 +581,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD[7] = arrVal[3];
     	
     	//----Checksumme korrigieren
-    	tmCMD = this.convertArray(tmpCMD);
+    	tmpCMD = this.convertArray(tmpCMD);
     	
     	arrCMD.push(tmpCMD);
         parentThis.processCMD();
