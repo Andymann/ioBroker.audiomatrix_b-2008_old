@@ -238,9 +238,10 @@ class AudiomatrixB2008 extends utils.Adapter {
                     	}  
                 	}, OFFLINETIMER);
                 }else if(tmp.length==2){	//----WaitQueue, Der Wert entspricht den zu wartenden Milisekunden
+                	var iWait = tmp[0]*256 + tmp[1];
                 	this.log.info('processCMD.waitQueue: ' + iWait.toString() );
                 	//bWait=true;
-                	//var iWait = tmp[0]*256 + tmp[1];
+                	
                 	//setTimeout(function(){ bWait=false; parentThis.log.info('processCMD.waitQueue DONE'); }, iWait);
                 }else{
                 	//----Nix
