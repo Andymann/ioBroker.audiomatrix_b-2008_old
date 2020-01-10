@@ -237,7 +237,7 @@ class AudiomatrixB2008 extends utils.Adapter {
                 }else if(tmp.length==2){	//----WaitQueue, Der Wert entspricht den zu wartenden Milisekunden
                 	var iWait = tmp[0]*256 + tmp[1];
                 	this.log.info('processCMD.waitQueue: ' + iWait.toString() );
-                	setTimeout(function(){ parenThis.log.info('processCMD.waitQueue DONE'); }, iWait);
+                	setTimeout(function(){ parentThis.log.info('processCMD.waitQueue DONE'); }, iWait);
                 }else{
                 	//----Nix
                 }
