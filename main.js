@@ -135,7 +135,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	pingMatrix(){
 		if(bConnection==true){
 			this.log.info('pingMatrix()' );
-			if(arrCMD.length==0){}
+			if(arrCMD.length==0){
 				arrCMD.push(cmdConnect);
 		        this.processCMD();
 		        //bWaitingForResponse=false;
