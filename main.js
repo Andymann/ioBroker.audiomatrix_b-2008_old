@@ -138,7 +138,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			if(arrCMD.length==0){
 				this.log.info('pingMatrix()' );
 				arrCMD.push(cmdConnect);
-		        this.processCMD();
+		        //this.processCMD();
 		        //bWaitingForResponse=false;
 		        if(bFirstPing){
 	    	    	//----Ab jetzt nicht mehr
@@ -194,7 +194,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	        parentThis.log.info('_connect().connection==false, sending CMDCONNECT:' + parentThis.toHexString(cmdConnect));
             arrCMD.push(cmdConnect);
             //iMaxTryCounter = MAXTRIES;
-        	parentThis.processCMD();
+//        	parentThis.processCMD();
         	
 		}else{
 			parentThis.log.debug("_connect().bConnection==true. Nichts tun");
