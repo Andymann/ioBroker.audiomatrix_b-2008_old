@@ -209,6 +209,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		Alle Befehle werden in arrCMD[] gespeichert. Die Methode arbeitet den naechsten Befehl ab.	
 	*/
 	processCMD(){
+		var bWait=false;
 		//this.log.info("processCMD()");
 		if(bWaitingForResponse==false){
 			while(arrCMD.length>0){
@@ -216,6 +217,7 @@ class AudiomatrixB2008 extends utils.Adapter {
                 bWaitingForResponse=true;
                 var tmp = arrCMD.shift();
                 if(tmp.length==10){	//----Normaler Befehl
+                if(bWait==false){}
                 	this.log.info('processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
                		lastCMD = tmp;
                 	iMaxTryCounter = MAXTRIES;
@@ -234,10 +236,14 @@ class AudiomatrixB2008 extends utils.Adapter {
                     		//parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
                     	}  
                 	}, OFFLINETIMER);
+                }else{
+                	this.log.info('bWait==TRUE');
+                }
                 }else if(tmp.length==2){	//----WaitQueue, Der Wert entspricht den zu wartenden Milisekunden
+                	bWait=true;
                 	var iWait = tmp[0]*256 + tmp[1];
                 	this.log.info('processCMD.waitQueue: ' + iWait.toString() );
-                	setTimeout(function(){ parentThis.log.info('processCMD.waitQueue DONE'); }, iWait);
+                	setTimeout(function(){ bWait=false; parentThis.log.info('processCMD.waitQueue DONE'); }, iWait);
                 }else{
                 	//----Nix
                 }
