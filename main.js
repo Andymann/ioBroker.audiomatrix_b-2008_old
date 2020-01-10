@@ -346,7 +346,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			
 			//----Queue
 			clearInterval(cmdInterval);
-            cmdInterval = setInterval(function(){parentThis.processCMD()}, 100);
+            cmdInterval = setInterval(function(){parentThis.processCMD()}, 500);
 			
             if(cb){
                 cb();
@@ -474,7 +474,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----OUT:1-8
     //----pOnOff: TRUE / FALSE
     _changeRouting(pIn, pOut, pOnOff){
-    	this.log.info('changeRouting: In:' + pIn.toString() + ' Out:' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
+    	this.log.info('changeRouting(): In:' + pIn.toString() + ' Out:' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
     	var tmpCMD = cmdRouting.slice();
     	var i = pOnOff ? 1 : 0;
     	var onOff = conv754(i);
@@ -488,7 +488,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	
     	//----Checksumme korrigieren
     	tmpCMD = this.convertArray(tmpCMD);
-    	
+    	this.log.info('changeRouting(): adding:' + this.toHexString(tmpCMD));
     	arrCMD.push(tmpCMD);
     	arrCMD.push(cmdWaitQueue_1000);
         parentThis.processCMD(); 
