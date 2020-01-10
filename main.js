@@ -492,7 +492,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	this.log.info('changeRouting(): adding:' + this.toHexString(tmpCMD));
     	arrCMD.push(tmpCMD);
     	
-    	this.log.info('changeRouting(): last CMD in arrCMD:' + toHexString( arrCMD[arrCMD.length-1] ) );
+    	this.log.info('changeRouting(): last CMD in arrCMD:' + this.toHexString( arrCMD[arrCMD.length-1] ) );
     	//arrCMD.push(cmdWaitQueue_1000);
         //parentThis.processCMD(); 
     }
