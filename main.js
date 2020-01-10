@@ -217,7 +217,7 @@ class AudiomatrixB2008 extends utils.Adapter {
                 bWaitingForResponse=true;
                 var tmp = arrCMD.shift();
                 if(tmp.length==10){	//----Normaler Befehl
-                if(bWait==false){}
+                if(bWait==false){
                 	this.log.info('processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
                		lastCMD = tmp;
                 	iMaxTryCounter = MAXTRIES;
