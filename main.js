@@ -134,8 +134,9 @@ class AudiomatrixB2008 extends utils.Adapter {
 	
 	pingMatrix(){
 		if(bConnection==true){
-			this.log.info('pingMatrix()' );
+			
 			if(arrCMD.length==0){
+				this.log.info('pingMatrix()' );
 				arrCMD.push(cmdConnect);
 		        this.processCMD();
 		        //bWaitingForResponse=false;
@@ -490,6 +491,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	this.log.info('changeRouting(): adding:' + this.toHexString(tmpCMD));
     	arrCMD.push(tmpCMD);
+    	
+    	this.log.info('changeRouting(): last CMD in arrCMD:' + toHexString( arrCMD[arrCMD.length-1] ) );
     	//arrCMD.push(cmdWaitQueue_1000);
         //parentThis.processCMD(); 
     }
