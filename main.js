@@ -147,8 +147,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	        	this._changeRouting(4, 4, true);
 	        	this._changeRouting(5, 5, true);
 	        	this._changeRouting(6, 6, true);
-	        	this._changeRouting(7, 7, true);
-	        	this._changeRouting(8, 8, true);
+	        	
 	        }
 	                
 		}else{
