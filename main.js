@@ -473,6 +473,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----OUT:1-8
     //----pOnOff: TRUE / FALSE
     _changeRouting(pIn, pOut, pOnOff){
+    	//new Buffer([0x5A, 0xA5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
     	this.log.info('changeRouting(): In:' + pIn.toString() + ' Out:' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
     	var tmpCMD = cmdRouting.slice();
     	var i = pOnOff ? 1 : 0;
