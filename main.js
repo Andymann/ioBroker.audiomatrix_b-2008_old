@@ -135,22 +135,22 @@ class AudiomatrixB2008 extends utils.Adapter {
 	pingMatrix(){
 		if(bConnection==true){
 			this.log.info('pingMatrix()' );
-			arrCMD.push(cmdConnect);
-	        this.processCMD();
-	        //bWaitingForResponse=false;
-	        if(bFirstPing){
-	        	//----Ab jetzt nicht mehr
-	        	bFirstPing=false;
-	        	this.setDate();
-	        	this._changeRouting(1, 1, true);
-	        	this._changeRouting(2, 2, true);
-	        	this._changeRouting(3, 3, true);
-	        	this._changeRouting(4, 4, true);
-	        	this._changeRouting(5, 5, true);
-	        	this._changeRouting(6, 6, true);
-	        	
-	        }
-	                
+			if(arrCMD.length==0){}
+				arrCMD.push(cmdConnect);
+		        this.processCMD();
+		        //bWaitingForResponse=false;
+		        if(bFirstPing){
+	    	    	//----Ab jetzt nicht mehr
+	        		bFirstPing=false;
+	        		this.setDate();
+		        	this._changeRouting(1, 1, true);
+		        	this._changeRouting(2, 2, true);
+	    	    	this._changeRouting(3, 3, true);
+	        		this._changeRouting(4, 4, true);
+	        		this._changeRouting(5, 5, true);
+	        		this._changeRouting(6, 6, true);
+	        	}
+	        }      
 		}else{
 		
 		}
