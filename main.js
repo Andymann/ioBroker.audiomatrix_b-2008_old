@@ -467,7 +467,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	
     	arrCMD.push(tmpCMD);
-        parentThis.processCMD(); 	
+        //parentThis.processCMD(); 	
     }
     
     //----IN: 1-6
@@ -490,8 +490,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	this.log.info('changeRouting(): adding:' + this.toHexString(tmpCMD));
     	arrCMD.push(tmpCMD);
-    	arrCMD.push(cmdWaitQueue_1000);
-        parentThis.processCMD(); 
+    	//arrCMD.push(cmdWaitQueue_1000);
+        //parentThis.processCMD(); 
     }
     
     //----Sendet die Befehle zum Setzen des korrekten Datums an die Matrix
@@ -502,7 +502,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	this._setHardwareDate_day();
     	this._setHardwareDate_hour();
     	this._setHardwareDate_minute();
-    	parentThis.processCMD(); 	
+    	//parentThis.processCMD(); 	
     }
     
     
