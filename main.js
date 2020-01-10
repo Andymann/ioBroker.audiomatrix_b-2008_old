@@ -53,6 +53,10 @@ var cmdVol000 = new Buffer([0x5A, 0xA5, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A
 
 var cmdRouting = new Buffer([0x5A, 0xA5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
 
+//----Interne Verwendung
+var cmdWaitQueue_200 = new Buffer([0x00, 0xC8, ]);
+var cmdWaitQueue_1000 = new Buffer([0x03, 0xE8, ]);
+
 const MAXTRIES = 3;
 const PINGINTERVALL = 1000;
 const BIGINTERVALL = 10000;
@@ -137,14 +141,14 @@ class AudiomatrixB2008 extends utils.Adapter {
 	        	//----Ab jetzt nicht mehr
 	        	bFirstPing=false;
 	        	this.setDate();
-	        	//this._changeRouting(1, 1, true);
-	        	//this._changeRouting(2, 2, true);
-	        	//this._changeRouting(3, 3, true);
-	        	//this._changeRouting(4, 4, true);
+	        	this._changeRouting(1, 1, true);
+	        	this._changeRouting(2, 2, true);
+	        	this._changeRouting(3, 3, true);
+	        	this._changeRouting(4, 4, true);
 	        	this._changeRouting(5, 5, true);
-	        	//this._changeRouting(6, 6, true);
-	        	//this._changeRouting(7, 7, true);
-	        	//this._changeRouting(8, 8, true);
+	        	this._changeRouting(6, 6, true);
+	        	this._changeRouting(7, 7, true);
+	        	this._changeRouting(8, 8, true);
 	        }
 	                
 		}else{
@@ -211,24 +215,33 @@ class AudiomatrixB2008 extends utils.Adapter {
                 //this.log.info('processCMD: bWaitingForResponse==FALSE, arrCMD.length=' +arrCMD.length.toString());
                 bWaitingForResponse=true;
                 var tmp = arrCMD.shift();
-                this.log.info('processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
-                lastCMD = tmp;
-                iMaxTryCounter = MAXTRIES;
-                matrix.write(tmp);  
-                bHasIncomingData=false;
-                clearTimeout(query);
-                query = setTimeout(function() {
-                    //----Es ist ander als bei der 880er: 2 Sekunden keine Antwort und das Teil ist offline       
-                    if(bHasIncomingData==false){
-                    	//----Nach x Milisekunden ist noch gar nichts angekommen....
-                    	parentThis.log.error("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. OFFLINE?");
-                    	clearInterval(pingInterval);
-                    	bWaitingForResponse=false;
-                    	parentThis.reconnect();
-                    }else{
-                    	//parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
-                    }  
-                }, OFFLINETIMER);
+                if(tmp.length==10){	//----Normaler Befehl
+                	this.log.info('processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
+               		lastCMD = tmp;
+                	iMaxTryCounter = MAXTRIES;
+                	matrix.write(tmp);  
+                	bHasIncomingData=false;
+                	clearTimeout(query);
+                	query = setTimeout(function() {
+                    	//----Es ist ander als bei der 880er: 2 Sekunden keine Antwort und das Teil ist offline       
+                    	if(bHasIncomingData==false){
+                    		//----Nach x Milisekunden ist noch gar nichts angekommen....
+                    		parentThis.log.error("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. OFFLINE?");
+                    		clearInterval(pingInterval);
+                    		bWaitingForResponse=false;
+                    		parentThis.reconnect();
+                    	}else{
+                    		//parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
+                    	}  
+                	}, OFFLINETIMER);
+                }else if(tmp.length==2){	//----WaitQueue, Der Wert entspricht den zu wartenden Milisekunden
+                	var iWait = tmp[0]*256 + tmp[1];
+                	this.log.info('processCMD.waitQueue: ' + iWait.toString() );
+                	setTimeout(function(){ parenThis.log.info('processCMD.waitQueue DONE'); }, iWait);
+                }else{
+                	//----Nix
+                }
+                
             }
             //else{
             //    this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
@@ -466,6 +479,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     	tmpCMD = this.convertArray(tmpCMD);
     	
     	arrCMD.push(tmpCMD);
+    	arrCMD.push(cmdWaitQueue_1000);
         parentThis.processCMD(); 
     }
     
