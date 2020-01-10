@@ -507,12 +507,12 @@ class AudiomatrixB2008 extends utils.Adapter {
     
     setRouting(){
     	this.log.info('setRouting()');
-    	this._changeRouting(1, 1, true);
-		this._changeRouting(2, 2, true);
-		this._changeRouting(3, 3, true);
-	    this._changeRouting(4, 4, true);
-	    this._changeRouting(5, 5, true);
-	    this._changeRouting(6, 6, true);
+    	this._changeRouting(1, 1, false);
+		this._changeRouting(2, 2, false);
+		this._changeRouting(3, 3, false);
+	    this._changeRouting(4, 4, false);
+	    this._changeRouting(5, 5, false);
+	    this._changeRouting(6, 6, false);
     
     }
     
