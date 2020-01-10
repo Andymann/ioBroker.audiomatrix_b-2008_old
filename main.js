@@ -214,9 +214,7 @@ class AudiomatrixB2008 extends utils.Adapter {
                 bWaitingForResponse=true;
                 //if(bWait==false){
                 var tmp = arrCMD.shift();
-                this.log.info('processCMD() from arrCMD:' + this.toHexString(tmp) );
                 if(tmp.length==10){	//----Normaler Befehl
-                
                 	this.log.info('processCMD: next CMD=' + this.toHexString(tmp) + ' arrCMD.length rest=' +arrCMD.length.toString());
                		lastCMD = tmp;
                 	iMaxTryCounter = MAXTRIES;
@@ -239,7 +237,6 @@ class AudiomatrixB2008 extends utils.Adapter {
                 	var iWait = tmp[0]*256 + tmp[1];
                 	this.log.info('processCMD.waitQueue: ' + iWait.toString() );
                 	//bWait=true;
-                	
                 	//setTimeout(function(){ bWait=false; parentThis.log.info('processCMD.waitQueue DONE'); }, iWait);
                 }else{
                 	//----Nix
@@ -345,7 +342,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			
 			//----Queue
 			clearInterval(cmdInterval);
-            cmdInterval = setInterval(function(){parentThis.processCMD()}, 500);
+            cmdInterval = setInterval(function(){parentThis.processCMD()}, 50);
 			
             if(cb){
                 cb();
