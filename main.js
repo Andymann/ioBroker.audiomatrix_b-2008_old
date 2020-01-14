@@ -509,7 +509,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----pOnOff: TRUE / FALSE
     _changeRouting(pIn, pOut, pOnOff){    	
 		this.log.info('changeRouting() via GUI: In(Index):' + pIn.toString() + ' Out(Index):' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
-		if((pIn>0)&&(pIn<7)){
+		if((pIn>=0)&&(pIn<7)){
 			var tmpCMD = new Buffer([0x5A, 0xA5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
 			var i = pOnOff ? 1 : 0;
 			var onOff = conv754(i);
