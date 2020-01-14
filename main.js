@@ -474,8 +474,15 @@ class AudiomatrixB2008 extends utils.Adapter {
         	if(id.toUpperCase().endsWith('MAINVOLUME')){
         		this._changeMainVolume(val);
         	}else if(id.toUpperCase().includes('ROUTINGNODE_IN_')){
+				var sTemp = id.substring(id.indexOf("ID_")+3);
+				sTemp = sTemp.substring(0,2);
+				sTemp = sTemp.trim();
+				var idVal = parseInt(sTemp)+1;
+        		var iIn = (idVal-idVal%8)/8;
+				var iOut= idVal-(iIn*8);
 
-        		//this._changeRouting(val);
+				//----Ein- und Ausgang sind jetzt 0-indiziert
+				this._changeRouting(iIn, iOut, val);
         	}
         	
         }        
@@ -502,7 +509,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----pOnOff: TRUE / FALSE
     _changeRouting(pIn, pOut, pOnOff){
     	
-		this.log.info('changeRouting() via GUI: In:' + pIn.toString() + ' Out:' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
+		this.log.info('changeRouting() via GUI: In(Index):' + pIn.toString() + ' Out(Index):' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
 		/*
     	//var tmpCMD = cmdRouting.slice();
     	var tmpCMD = new Buffer([0x5A, 0xA5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
