@@ -392,7 +392,12 @@ class AudiomatrixB2008 extends utils.Adapter {
     
     //----Aufruf aus onReady. Hier wird angelegt, was spaeter gesteuert werden kann
     async createStates(){
-    	parentThis.log.info('createStates(): mainVolume');
+		this._createState_mainVolume();
+		this._createState_Routing();
+    }
+	
+	async _createState_mainVolume(){
+		parentThis.log.info('createStates(): mainVolume');
     	await this.setObjectAsync('mainVolume', {
                 type: 'state',
                 common: {
@@ -406,9 +411,29 @@ class AudiomatrixB2008 extends utils.Adapter {
                 max: 100
             },
             native: {},
-            });
-    }
-    
+        });
+	}
+
+
+	async _createState_Routing(){
+		parentThis.log.info('createStates(): Routing');
+		for (var in = 0; in < 8; in++) {
+            for (var out = 0; out < 8; out++) {
+                //await this.setObjectAsync('routingNode_' + ((in*8 + out)+1).toString(), {
+				await this.setObjectAsync('routingNode_IN_' + ((in*8)+1).toString() + '_OUT_'+ (out +1).toString(), {
+                    type: 'state',
+                    common: {
+                        name: 'routing',
+                        type: 'boolean',
+                        role: 'indicator',
+                        read: true,
+                        write: true,
+                    },
+                    native: {},
+                });
+            }
+        }
+	}
     
     testConversion(){
     	var value = 100; // JS number variable
@@ -445,13 +470,15 @@ class AudiomatrixB2008 extends utils.Adapter {
         	//this.log.info('changeMatrix: per GUI. ID:' + id.toString() );
         	if(id.toUpperCase().endsWith('MAINVOLUME')){
         		this._changeMainVolume(val);
+        	}else if(id.toUpperCase().includes('ROUTINGNODE_IN_')){
+        		this._changeRouting(val);
         	}
         	
         }        
     }
     
     _changeMainVolume(val){
-    	this.log.info('changeMainVolume: VAL:' + val.toString() );
+    	this.log.info('changeMainVolume via GUI: VAL:' + val.toString() );
     	var arrVal = conv754(val);
     	var tmpCMD = cmdVol000.slice();
     	tmpCMD[4] = arrVal[0];
@@ -471,7 +498,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----pOnOff: TRUE / FALSE
     _changeRouting(pIn, pOut, pOnOff){
     	
-    	this.log.info('changeRouting(): In:' + pIn.toString() + ' Out:' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
+		this.log.info('changeRouting() via GUI: In:' + pIn.toString() + ' Out:' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
+		/*
     	//var tmpCMD = cmdRouting.slice();
     	var tmpCMD = new Buffer([0x5A, 0xA5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
     	var i = pOnOff ? 1 : 0;
@@ -489,9 +517,9 @@ class AudiomatrixB2008 extends utils.Adapter {
     	this.log.info('changeRouting(): adding:' + this.toHexString(tmpCMD));
     	arrCMD.push(tmpCMD);
     	
-    	this.log.info('changeRouting(): last CMD in arrCMD:' + this.toHexString( arrCMD[arrCMD.length-1] ) );
-    	//arrCMD.push(cmdWaitQueue_1000);
-        //parentThis.processCMD(); 
+    	//this.log.info('changeRouting(): last CMD in arrCMD:' + this.toHexString( arrCMD[arrCMD.length-1] ) );
+    	
+		*/
     }
     
     //----Sendet die Befehle zum Setzen des korrekten Datums an die Matrix
