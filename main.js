@@ -473,7 +473,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         	//this.log.info('changeMatrix: per GUI. ID:' + id.toString() );
         	if(id.toUpperCase().endsWith('MAINVOLUME')){
         		this._changeMainVolume(val);
-        	}else if(id.toUpperCase().includes('ROUTINGNODE_IN_')){
+        	}else if(id.toUpperCase().includes('ROUTINGNODE_ID_')){
 				var sTemp = id.substring(id.indexOf("ID_")+3);
 				sTemp = sTemp.substring(0,2);
 				sTemp = sTemp.trim();
@@ -507,8 +507,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----IN: 1-6
     //----OUT:1-8
     //----pOnOff: TRUE / FALSE
-    _changeRouting(pIn, pOut, pOnOff){
-    	
+    _changeRouting(pIn, pOut, pOnOff){    	
 		this.log.info('changeRouting() via GUI: In(Index):' + pIn.toString() + ' Out(Index):' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
 		/*
     	//var tmpCMD = cmdRouting.slice();
