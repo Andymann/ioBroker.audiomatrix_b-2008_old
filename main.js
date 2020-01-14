@@ -144,7 +144,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 	    	    	//----Ab jetzt nicht mehr
 	        		bFirstPing=false;
 	        		this.setDate();
-	        		this.setRouting();
+	        		//this.setRouting();
 	        		
 	        	}
 	        }      
@@ -532,7 +532,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     	this._setHardwareDate_minute();
     	//parentThis.processCMD(); 	
     }
-    
+	
+	//----Test
     setRouting(){
     	this.log.info('setRouting()');
     	this._changeRouting(1, 1, false);
