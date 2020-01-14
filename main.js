@@ -417,10 +417,10 @@ class AudiomatrixB2008 extends utils.Adapter {
 
 	async _createState_Routing(){
 		parentThis.log.info('createStates(): Routing');
-		for (var in = 0; in < 8; in++) {
-            for (var out = 0; out < 8; out++) {
+		for (var inVal = 0; inVal < 8; inVal++) {
+            for (var outVal = 0; outVal < 8; outVal++) {
                 //await this.setObjectAsync('routingNode_' + ((in*8 + out)+1).toString(), {
-				await this.setObjectAsync('routingNode_IN_' + ((in*8)+1).toString() + '_OUT_'+ (out +1).toString(), {
+				await this.setObjectAsync('routingNode_IN_' + ((inVal*8)+1).toString() + '_OUT_'+ (outVal +1).toString(), {
                     type: 'state',
                     common: {
                         name: 'routing',
