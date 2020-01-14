@@ -423,7 +423,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 				var sID = (inVal*8 + outVal)+"";
     			while (sID.length < 2) sID = "0" + sID;
     			
-				await this.setObjectAsync('routingNode_ID_' + sID +'__IN_' + (inVal*+1).toString() + '_OUT_'+ (outVal +1).toString(), {
+				await this.setObjectAsync('routingNode_ID_' + sID +'__IN_' + (inVal +1).toString() + '_OUT_'+ (outVal +1).toString(), {
                     type: 'state',
                     common: {
                         name: 'routing',
