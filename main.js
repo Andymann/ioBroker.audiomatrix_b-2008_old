@@ -515,7 +515,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			var onOff = conv754(i);
 			
 			tmpCMD[2] = pIn+1;
-			tmpCMD[3] = pOut + 50+1;
+			tmpCMD[3] = pOut + 50;
 			tmpCMD[4] = onOff[0];
 			tmpCMD[5] = onOff[1];
 			tmpCMD[6] = onOff[2];
