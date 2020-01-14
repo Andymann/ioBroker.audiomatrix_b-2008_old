@@ -420,7 +420,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 		for (var inVal = 0; inVal < 8; inVal++) {
             for (var outVal = 0; outVal < 8; outVal++) {
                 //await this.setObjectAsync('routingNode_' + ((in*8 + out)+1).toString(), {
-				await this.setObjectAsync('routingNode_IN_' + ((inVal*8)+1).toString() + '_OUT_'+ (outVal +1).toString(), {
+				await this.setObjectAsync('routingNode_ID_' + (inVal*8 + outVal) +'__IN_' + ((inVal*8)+1).toString() + '_OUT_'+ (outVal +1).toString(), {
                     type: 'state',
                     common: {
                         name: 'routing',
@@ -471,7 +471,8 @@ class AudiomatrixB2008 extends utils.Adapter {
         	if(id.toUpperCase().endsWith('MAINVOLUME')){
         		this._changeMainVolume(val);
         	}else if(id.toUpperCase().includes('ROUTINGNODE_IN_')){
-        		this._changeRouting(val);
+
+        		//this._changeRouting(val);
         	}
         	
         }        
