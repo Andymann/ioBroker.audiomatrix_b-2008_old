@@ -477,7 +477,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 				var sTemp = id.substring(id.indexOf("ID_")+3);
 				sTemp = sTemp.substring(0,2);
 				sTemp = sTemp.trim();
-				var idVal = parseInt(sTemp)+1;
+				var idVal = parseInt(sTemp);
         		var iIn = (idVal-idVal%8)/8;
 				var iOut= idVal-(iIn*8);
 
@@ -515,7 +515,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 			var onOff = conv754(i);
 			
 			tmpCMD[2] = pIn+1;
-			tmpCMD[3] = pOut + 50;
+			tmpCMD[3] = pOut + 50+1;
 			tmpCMD[4] = onOff[0];
 			tmpCMD[5] = onOff[1];
 			tmpCMD[6] = onOff[2];
