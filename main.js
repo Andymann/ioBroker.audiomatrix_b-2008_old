@@ -504,32 +504,31 @@ class AudiomatrixB2008 extends utils.Adapter {
         //parentThis.processCMD(); 	
     }
     
-    //----IN: 1-6
-    //----OUT:1-8
+    //----IN: 0-7
+    //----OUT:0-8
     //----pOnOff: TRUE / FALSE
     _changeRouting(pIn, pOut, pOnOff){    	
 		this.log.info('changeRouting() via GUI: In(Index):' + pIn.toString() + ' Out(Index):' + pOut.toString() + ' pOnOff:'+ pOnOff.toString() );
-		/*
-    	//var tmpCMD = cmdRouting.slice();
-    	var tmpCMD = new Buffer([0x5A, 0xA5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
-    	var i = pOnOff ? 1 : 0;
-    	var onOff = conv754(i);
-    	
-    	tmpCMD[2] = pIn;
-    	tmpCMD[3] = pOut + 50;
-    	tmpCMD[4] = onOff[0];
-    	tmpCMD[5] = onOff[1];
-    	tmpCMD[6] = onOff[2];
-    	tmpCMD[7] = onOff[3];
-    	
-    	//----Checksumme korrigieren
-    	tmpCMD = this.convertArray(tmpCMD);
-    	this.log.info('changeRouting(): adding:' + this.toHexString(tmpCMD));
-    	arrCMD.push(tmpCMD);
-    	
+		if((pIn>0)&&(pIn<7)){
+			var tmpCMD = new Buffer([0x5A, 0xA5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x10]);
+			var i = pOnOff ? 1 : 0;
+			var onOff = conv754(i);
+			
+			tmpCMD[2] = pIn+1;
+			tmpCMD[3] = pOut + 50+1;
+			tmpCMD[4] = onOff[0];
+			tmpCMD[5] = onOff[1];
+			tmpCMD[6] = onOff[2];
+			tmpCMD[7] = onOff[3];
+			
+			//----Checksumme korrigieren
+			tmpCMD = this.convertArray(tmpCMD);
+			this.log.info('changeRouting(): adding:' + this.toHexString(tmpCMD));
+			arrCMD.push(tmpCMD);
+		}else{
+			this.log.error('changeRouting() via GUI: Coax inputs are not supported' );
+		}
     	//this.log.info('changeRouting(): last CMD in arrCMD:' + this.toHexString( arrCMD[arrCMD.length-1] ) );
-    	
-		*/
     }
     
     //----Sendet die Befehle zum Setzen des korrekten Datums an die Matrix
