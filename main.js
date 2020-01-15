@@ -46,6 +46,7 @@ const ToFloat32 = num => {
 const HexToFloat32 = str => ToFloat32(parseInt(str, 16));
 const BinToFloat32 = str => ToFloat32(parseInt(str, 2));
 
+//https://gist.github.com/xposedbones/75ebaef3c10060a3ee3b246166caab56
 //---- Wert, IN von, IN bis, OUT von, OUT bis
 const map = (value, x1, y1, x2, y2) =>
   ((value - x1) * (y2 - x2)) / (y1 - x1) + x2;
@@ -792,13 +793,13 @@ class AudiomatrixB2008 extends utils.Adapter {
   //---- pID: 0..7
   //---- pVal: 0..100
   _changeInputGain(pID, pVal) {
+    this.log.info(
+      "changeInputGain via GUI. ID(Index):" +
+        pID.toString() +
+        " VAL:" +
+        pVal.toString()
+    );
     if (pID >= 0 && pID < 7) {
-      this.log.info(
-        "changeInputGain via GUI. ID(Index):" +
-          pID.toString() +
-          " VAL:" +
-          pVal.toString()
-      );
       pVal = map(pVal, 0, 100, -80, 0);
       this.log.info("changeInputGain via GUI: VAL(neu):" + pVal.toString());
       var arrVal = conv754(pVal);
