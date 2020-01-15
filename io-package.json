@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "audiomatrix_b-2008",
-		"version": "0.0.3",
+		"version": "0.0.4",
 		"news": {
 			"0.0.1": {
 				"en": "initial release",
@@ -22,6 +22,10 @@
 			"0.0.3": {
 				"en": "First functions",
 				"de": "Erste Funktionen"
+			},
+			"0.0.4": {
+				"en": "Routing basics, receive value from Harware",
+				"de": "Routing Basics, Werte aus der HArdware auslesen"
 			}
 		},
 		"title": "Audiomatrix B-2008",
