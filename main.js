@@ -17,6 +17,7 @@ const Float32ToHex = float32 => {
     .map((_, i) => getHex(view.getUint8(i)))
     .join("");
 };
+
 const Float32ToBin = float32 =>
   parseInt(Float32ToHex(float32), 16)
     .toString(2)
@@ -25,9 +26,7 @@ const conv754 = float32 => {
   const getHex = i => parseInt(("00" + i.toString(16)).slice(-2), 16);
   var view = new DataView(new ArrayBuffer(4));
   view.setFloat32(0, float32);
-  return Array.apply(null, { length: 4 }).map((_, i) =>
-    getHex(view.getUint8(i))
-  );
+  return Array.apply(null, { length: 4 }).map((_, i) => getHex(view.getUint8(i)));
 };
 
 const ToFloat32 = num => {
@@ -43,13 +42,13 @@ const ToFloat32 = num => {
     return float32 * sign;
   } else return 0;
 };
+
 const HexToFloat32 = str => ToFloat32(parseInt(str, 16));
 const BinToFloat32 = str => ToFloat32(parseInt(str, 2));
 
 //https://gist.github.com/xposedbones/75ebaef3c10060a3ee3b246166caab56
 //---- Wert, IN von, IN bis, OUT von, OUT bis
-const map = (value, x1, y1, x2, y2) =>
-  ((value - x1) * (y2 - x2)) / (y1 - x1) + x2;
+const map = (value, x1, y1, x2, y2) => ((value - x1) * (y2 - x2)) / (y1 - x1) + x2;
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
@@ -73,116 +72,17 @@ var arrCMD = [];
 var lastCMD;
 var in_msg = "";
 var parentThis;
-var cmdConnect = new Buffer([
-  0x5a,
-  0xa5,
-  0x14,
-  0x00,
-  0x40,
-  0x00,
-  0x00,
-  0x00,
-  0x0a,
-  0x5d
-]);
-var cmdBasicResponse = new Buffer([
-  0x5a,
-  0xa5,
-  0xf0,
-  0xf0,
-  0xf0,
-  0xf0,
-  0xf0,
-  0xf0,
-  0x0a,
-  0xa9
-]);
-var cmdTransmissionDone = new Buffer([
-  0x5a,
-  0xa5,
-  0xf1,
-  0xf1,
-  0xf1,
-  0xf1,
-  0xf1,
-  0xf1,
-  0x0a,
-  0xaf
-]);
+var cmdConnect = new Buffer([0x5a, 0xa5, 0x14, 0x00, 0x40, 0x00, 0x00, 0x00, 0x0a, 0x5d]);
+var cmdBasicResponse = new Buffer([0x5a, 0xa5, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0x0a, 0xa9]);
+var cmdTransmissionDone = new Buffer([0x5a, 0xa5, 0xf1, 0xf1, 0xf1, 0xf1, 0xf1, 0xf1, 0x0a, 0xaf]);
 
-var cmdVol100 = new Buffer([
-  0x5a,
-  0xa5,
-  0x07,
-  0x00,
-  0x42,
-  0xc8,
-  0x00,
-  0x00,
-  0x0a,
-  0x1a
-]);
-var cmdVol075 = new Buffer([
-  0x5a,
-  0xa5,
-  0x07,
-  0x00,
-  0x42,
-  0x96,
-  0x00,
-  0x00,
-  0x0a,
-  0xe8
-]);
-var cmdVol050 = new Buffer([
-  0x5a,
-  0xa5,
-  0x07,
-  0x00,
-  0x42,
-  0x48,
-  0x00,
-  0x00,
-  0x0a,
-  0x9a
-]);
-var cmdVol025 = new Buffer([
-  0x5a,
-  0xa5,
-  0x07,
-  0x00,
-  0x41,
-  0xc8,
-  0x00,
-  0x00,
-  0x0a,
-  0x19
-]);
-var cmdVol000 = new Buffer([
-  0x5a,
-  0xa5,
-  0x07,
-  0x00,
-  0x00,
-  0x00,
-  0x00,
-  0x00,
-  0x0a,
-  0x10
-]);
+var cmdVol100 = new Buffer([0x5a, 0xa5, 0x07, 0x00, 0x42, 0xc8, 0x00, 0x00, 0x0a, 0x1a]);
+var cmdVol075 = new Buffer([0x5a, 0xa5, 0x07, 0x00, 0x42, 0x96, 0x00, 0x00, 0x0a, 0xe8]);
+var cmdVol050 = new Buffer([0x5a, 0xa5, 0x07, 0x00, 0x42, 0x48, 0x00, 0x00, 0x0a, 0x9a]);
+var cmdVol025 = new Buffer([0x5a, 0xa5, 0x07, 0x00, 0x41, 0xc8, 0x00, 0x00, 0x0a, 0x19]);
+var cmdVol000 = new Buffer([0x5a, 0xa5, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x10]);
 
-var cmdRouting = new Buffer([
-  0x5a,
-  0xa5,
-  0x01,
-  0x33,
-  0x00,
-  0x00,
-  0x00,
-  0x00,
-  0x0a,
-  0x10
-]);
+var cmdRouting = new Buffer([0x5a, 0xa5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x10]);
 
 //----Interne Verwendung
 var cmdWaitQueue_200 = new Buffer([0x00, 0xc8]);
@@ -277,10 +177,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   queryMatrix() {
-    this.log.info(
-      "AudioMatrix: queryMatrix(). TBD.  arrCMD.length vorher=" +
-        arrCMD.length.toString()
-    );
+    this.log.info("AudioMatrix: queryMatrix(). TBD.  arrCMD.length vorher=" + arrCMD.length.toString());
     //        bQueryInProgress  = true;
     //		this.setState('queryState', true, true);
     //        arrQuery.forEach(function(item, index, array) {
@@ -310,10 +207,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   _connect() {
     this.log.info("_connect()");
     if (bConnection == false) {
-      parentThis.log.info(
-        "_connect().connection==false, sending CMDCONNECT:" +
-          parentThis.toHexString(cmdConnect)
-      );
+      parentThis.log.info("_connect().connection==false, sending CMDCONNECT:" + parentThis.toHexString(cmdConnect));
       arrCMD.push(cmdConnect);
       //iMaxTryCounter = MAXTRIES;
       //        	parentThis.processCMD();
@@ -340,12 +234,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         var tmp = arrCMD.shift();
         if (tmp.length == 10) {
           //----Normaler Befehl
-          this.log.info(
-            "processCMD: next CMD=" +
-              this.toHexString(tmp) +
-              " arrCMD.length rest=" +
-              arrCMD.length.toString()
-          );
+          this.log.info("processCMD: next CMD=" + this.toHexString(tmp) + " arrCMD.length rest=" + arrCMD.length.toString());
           lastCMD = tmp;
           iMaxTryCounter = MAXTRIES;
           matrix.write(tmp);
@@ -355,9 +244,7 @@ class AudiomatrixB2008 extends utils.Adapter {
             //----Es ist ander als bei der 880er: 2 Sekunden keine Antwort und das Teil ist offline
             if (bHasIncomingData == false) {
               //----Nach x Milisekunden ist noch gar nichts angekommen....
-              parentThis.log.error(
-                "processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. OFFLINE?"
-              );
+              parentThis.log.error("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. OFFLINE?");
               clearInterval(pingInterval);
               bWaitingForResponse = false;
               parentThis.reconnect();
@@ -383,9 +270,7 @@ class AudiomatrixB2008 extends utils.Adapter {
       //    this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
       //}
     } else {
-      this.log.info(
-        "AudioMatrix: processCMD: bWaitingForResponse==TRUE. Nichts machen"
-      );
+      this.log.info("AudioMatrix: processCMD: bWaitingForResponse==TRUE. Nichts machen");
     }
 
     //----Anzeige der Quelength auf der Oberflaeche
@@ -399,12 +284,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     if (bWaitingForResponse == true) {
       if (in_msg.length >= 20 && in_msg.includes("5aa5")) {
         var iStartPos = in_msg.indexOf("5aa5");
-        if (
-          in_msg.toLowerCase().substring(iStartPos + 16, iStartPos + 18) == "0a"
-        ) {
-          var tmpMSG = in_msg
-            .toLowerCase()
-            .substring(iStartPos, iStartPos + 20); //Checksum
+        if (in_msg.toLowerCase().substring(iStartPos + 16, iStartPos + 18) == "0a") {
+          var tmpMSG = in_msg.toLowerCase().substring(iStartPos, iStartPos + 20); //Checksum
           in_msg = in_msg.slice(20); //Die ersten 20 Zeichen abschneiden
           //parentThis.log.info('_processIncoming(); filtered:' + tmpMSG);
           //					parentThis.bWaitingForResponse = false;
@@ -414,26 +295,19 @@ class AudiomatrixB2008 extends utils.Adapter {
           //iMaxTryCounter = 3;
           //					iMaxTimeoutCounter = 0;
           //					parentThis.processCMD();
-        } else if (
-          in_msg.toLowerCase().substring(iStartPos + 4, iStartPos + 6) == "11"
-        ) {
+        } else if (in_msg.toLowerCase().substring(iStartPos + 4, iStartPos + 6) == "11") {
           //----5aa511c2c00000c2c00000c2c00000c2c0...
           //----In der Regel als Antwort auf einen PING
           //parentThis.log.info("LevelMeter incoming");
           bWaitingForResponse = false;
-        } else if (
-          in_msg.toLowerCase().substring(iStartPos + 4, iStartPos + 6) == "12"
-        ) {
+        } else if (in_msg.toLowerCase().substring(iStartPos + 4, iStartPos + 6) == "12") {
           //----5aa512c2c00000c2c00000c...
           //----In der Regel als Antwort auf einen PING
           //parentThis.log.info("Sprectrum incoming");
           bWaitingForResponse = false;
         } else {
           //----Irgendwie vergniesgnaddelt
-          parentThis.log.info(
-            "AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:" +
-              in_msg
-          );
+          parentThis.log.info("AudioMatrix: matrix.on data: Fehlerhafte oder inkomplette Daten empfangen:" + in_msg);
         }
       }
     } else {
@@ -474,10 +348,7 @@ class AudiomatrixB2008 extends utils.Adapter {
       var sHex = sMSG.substring(8, 16);
       var iVal = HexToFloat32(sHex);
       iVal = this.simpleMap(0, 100, iVal);
-      this.log.info(
-        "_parseMSG(): received main volume from Matrix. Processed Value:" +
-          iVal.toString()
-      );
+      this.log.info("_parseMSG(): received main volume from Matrix. Processed Value:" + iVal.toString());
       this.setStateAsync("mainVolume", { val: iVal, ack: true });
     } else {
       var sHex = sMSG.substring(4, 2);
@@ -491,10 +362,7 @@ class AudiomatrixB2008 extends utils.Adapter {
           var sValue = sMSG.substring(8, 16);
           var iValue = HexToFloat32(sHex);
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
-          this.log.info(
-            "_parseMSG(): received inputGain from Matrix. Processed Value:" +
-              iValue.toString()
-          );
+          this.log.info("_parseMSG(): received inputGain from Matrix. Processed Value:" + iValue.toString());
           this.setStateAsync("inputGain", { val: iValue, ack: true });
         }
       } else if (iVal >= 7 && iVal <= 14) {
@@ -506,10 +374,7 @@ class AudiomatrixB2008 extends utils.Adapter {
           var sValue = sMSG.substring(8, 16);
           var iValue = HexToFloat32(sHex);
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
-          this.log.info(
-            "_parseMSG(): received outputGain from Matrix. Processed Value:" +
-              iValue.toString()
-          );
+          this.log.info("_parseMSG(): received outputGain from Matrix. Processed Value:" + iValue.toString());
           this.setStateAsync("outputGain", { val: iValue, ack: true });
         }
       }
@@ -517,9 +382,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   connectMatrix(cb) {
-    this.log.info(
-      "connectMatrix():" + this.config.host + ":" + this.config.port
-    );
+    this.log.info("connectMatrix():" + this.config.host + ":" + this.config.port);
 
     bFirstPing = true;
     bQueryDone = false;
@@ -562,11 +425,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     });
 
     matrix.on("error", function(e) {
-      if (
-        e.code == "ENOTFOUND" ||
-        e.code == "ECONNREFUSED" ||
-        e.code == "ETIMEDOUT"
-      ) {
+      if (e.code == "ENOTFOUND" || e.code == "ECONNREFUSED" || e.code == "ETIMEDOUT") {
         matrix.destroy();
       }
       parentThis.log.error(e);
@@ -665,34 +524,18 @@ class AudiomatrixB2008 extends utils.Adapter {
         var sID = inVal * 8 + outVal + "";
         while (sID.length < 2) sID = "0" + sID;
 
-        await this.setObjectAsync(
-          "routingNode_ID_" +
-            sID +
-            "__IN_" +
-            (inVal + 1).toString() +
-            "_OUT_" +
-            (outVal + 1).toString(),
-          {
-            type: "state",
-            common: {
-              name:
-                "Routing " +
-                (inVal + 1).toString() +
-                " -> " +
-                (outVal + 1).toString(),
-              type: "boolean",
-              role: "indicator",
-              desc:
-                "Routing " +
-                (inVal + 1).toString() +
-                " -> " +
-                (outVal + 1).toString(),
-              read: true,
-              write: true
-            },
-            native: {}
-          }
-        );
+        await this.setObjectAsync("routingNode_ID_" + sID + "__IN_" + (inVal + 1).toString() + "_OUT_" + (outVal + 1).toString(), {
+          type: "state",
+          common: {
+            name: "Routing " + (inVal + 1).toString() + " -> " + (outVal + 1).toString(),
+            type: "boolean",
+            role: "indicator",
+            desc: "Routing " + (inVal + 1).toString() + " -> " + (outVal + 1).toString(),
+            read: true,
+            write: true
+          },
+          native: {}
+        });
       }
     }
   }
@@ -707,20 +550,11 @@ class AudiomatrixB2008 extends utils.Adapter {
     var f32_bin = Float32ToBin(value); // JS number   =>   HEX string of a Float32 standard number
     var f32_bin_inverse = BinToFloat32(f32_bin); // HEX string of a Float32 standard number   =>   JS number
 
-    parentThis.log.info(
-      `Input value (${value}) => hex (${f32_hex}) [${Math.ceil(
-        f32_hex.length / 2
-      )} bytes] => float32 (${f32_bin_inverse})`
-    );
-    parentThis.log.info(
-      `Input value (${value}) => binary (${f32_bin}) [${f32_bin.length} bits] => float32 (${f32_bin_inverse})`
-    );
+    parentThis.log.info(`Input value (${value}) => hex (${f32_hex}) [${Math.ceil(f32_hex.length / 2)} bytes] => float32 (${f32_bin_inverse})`);
+    parentThis.log.info(`Input value (${value}) => binary (${f32_bin}) [${f32_bin.length} bits] => float32 (${f32_bin_inverse})`);
 
     parentThis.log.info("testConversion():" + f32_hex.toString());
-    parentThis.log.info(
-      "testConversion() len:" +
-        parentThis.toArray(f32_hex.toString()).length.toString()
-    );
+    parentThis.log.info("testConversion() len:" + parentThis.toArray(f32_hex.toString()).length.toString());
     parentThis.log.info(
       "testConversion() content:" +
         parentThis.toArray(f32_hex.toString())[0].toString() +
@@ -802,28 +636,12 @@ class AudiomatrixB2008 extends utils.Adapter {
   //---- pID: 0..7
   //---- pVal: 0..100
   _changeInputGain(pID, pVal) {
-    this.log.info(
-      "changeInputGain via GUI. ID(Index):" +
-        pID.toString() +
-        " VAL:" +
-        pVal.toString()
-    );
+    this.log.info("changeInputGain via GUI. ID(Index):" + pID.toString() + " VAL:" + pVal.toString());
     if (pID >= 0 && pID < 7) {
       pVal = map(pVal, 0, 100, -80, 0);
       this.log.info("changeInputGain via GUI: VAL(neu):" + pVal.toString());
       var arrVal = conv754(pVal);
-      var tmpCMD = new Buffer([
-        0x5a,
-        0xa5,
-        0x01 /* Input number */,
-        0x02 /* Gain */,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x0a,
-        0x10
-      ]);
+      var tmpCMD = new Buffer([0x5a, 0xa5, 0x01 /* Input number */, 0x02 /* Gain */, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x10]);
 
       tmpCMD[2] = pID + 1;
       tmpCMD[4] = arrVal[0];
@@ -833,38 +651,21 @@ class AudiomatrixB2008 extends utils.Adapter {
 
       //----Checksumme korrigieren
       tmpCMD = this.convertArray(tmpCMD);
+      this.log.info("changeInputGain(): adding:" + this.toHexString(tmpCMD));
       arrCMD.push(tmpCMD);
     } else {
-      this.log.error(
-        "changeInputGain() via GUI: Coax inputs are not supported"
-      );
+      this.log.error("changeInputGain() via GUI: Coax inputs are not supported");
     }
   }
 
   //---- pID: 0..7
   //---- pVal: 0..100
   _changeOutputGain(pID, pVal) {
-    this.log.info(
-      "changeOutputGain via GUI. ID(Index):" +
-        pID.toString() +
-        " VAL:" +
-        pVal.toString()
-    );
+    this.log.info("changeOutputGain via GUI. ID(Index):" + pID.toString() + " VAL:" + pVal.toString());
     pVal = map(pVal, 0, 100, -80, 0);
     this.log.info("changeOutputGain via GUI: VAL(neu):" + pVal.toString());
     var arrVal = conv754(pVal);
-    var tmpCMD = new Buffer([
-      0x5a,
-      0xa5,
-      0x01 /* Input number */,
-      0x02 /* Gain */,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x0a,
-      0x10
-    ]);
+    var tmpCMD = new Buffer([0x5a, 0xa5, 0x01 /* Input number */, 0x02 /* Gain */, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x10]);
 
     tmpCMD[2] = pID + 7;
     tmpCMD[4] = arrVal[0];
@@ -874,6 +675,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 
     //----Checksumme korrigieren
     tmpCMD = this.convertArray(tmpCMD);
+    this.log.info("changeOutputGain(): adding:" + this.toHexString(tmpCMD));
     arrCMD.push(tmpCMD);
   }
 
@@ -881,27 +683,9 @@ class AudiomatrixB2008 extends utils.Adapter {
   //----OUT:0-8
   //----pOnOff: TRUE / FALSE
   _changeRouting(pIn, pOut, pOnOff) {
-    this.log.info(
-      "changeRouting() via GUI: In(Index):" +
-        pIn.toString() +
-        " Out(Index):" +
-        pOut.toString() +
-        " pOnOff:" +
-        pOnOff.toString()
-    );
+    this.log.info("changeRouting() via GUI: In(Index):" + pIn.toString() + " Out(Index):" + pOut.toString() + " pOnOff:" + pOnOff.toString());
     if (pIn >= 0 && pIn < 7) {
-      var tmpCMD = new Buffer([
-        0x5a,
-        0xa5,
-        0x01,
-        0x33,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x0a,
-        0x10
-      ]);
+      var tmpCMD = new Buffer([0x5a, 0xa5, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x10]);
       var i = pOnOff ? 1 : 0;
       var onOff = conv754(i);
 
@@ -945,18 +729,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   _setHardwareDate_year() {
-    var tmpCMD = new Buffer([
-      0x5a,
-      0xa5,
-      0x10,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x5d
-    ]);
+    var tmpCMD = new Buffer([0x5a, 0xa5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5d]);
 
     var yyyy = new Date().getFullYear();
     var year = conv754(yyyy /*-1970*/);
@@ -975,18 +748,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   _setHardwareDate_month() {
-    var tmpCMD = new Buffer([
-      0x5a,
-      0xa5,
-      0x10,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x5d
-    ]);
+    var tmpCMD = new Buffer([0x5a, 0xa5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5d]);
 
     var mm = new Date().getMonth() + 1;
     var month = conv754(mm);
@@ -1005,18 +767,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   _setHardwareDate_day() {
-    var tmpCMD = new Buffer([
-      0x5a,
-      0xa5,
-      0x10,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x5d
-    ]);
+    var tmpCMD = new Buffer([0x5a, 0xa5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5d]);
 
     var dd = new Date().getDate();
     var day = conv754(dd);
@@ -1035,18 +786,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   _setHardwareDate_hour() {
-    var tmpCMD = new Buffer([
-      0x5a,
-      0xa5,
-      0x10,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x5d
-    ]);
+    var tmpCMD = new Buffer([0x5a, 0xa5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5d]);
 
     var hh = new Date().getHours();
     var hour = conv754(hh);
@@ -1065,18 +805,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   _setHardwareDate_minute() {
-    var tmpCMD = new Buffer([
-      0x5a,
-      0xa5,
-      0x10,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x5d
-    ]);
+    var tmpCMD = new Buffer([0x5a, 0xa5, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5d]);
 
     var mm = new Date().getMinutes();
     var minute = conv754(mm);
