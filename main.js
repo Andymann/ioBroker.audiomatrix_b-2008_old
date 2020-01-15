@@ -725,7 +725,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     );
   }
 
-  //----Ein State wurde veraendert
+  //----Ein State wurde per GUI veraendert
   changeMatrix(id, val, ack) {
     if (bConnection && val && !val.ack) {
       //this.log.info('matrixChanged: tabu=TRUE' );
@@ -752,20 +752,20 @@ class AudiomatrixB2008 extends utils.Adapter {
         this._changeRouting(iIn, iOut, val);
       } else if (id.toUpperCase().includes("INPUTGAIN_")) {
         //----Die ID des InputGains ist einstellig
-        var sID = id.substring(id.indexOf("GAIN_") + 5);
-        sID = sID.substring(0, 1);
+        var sID = id.substring(id.toUpperCase().indexOf("GAIN_") + 5);
+        //sID = sID.substring(0, 1);
         sID = sID.trim();
-        var idVal = parseInt(sTemp);
+        var idVal = parseInt(sID);
         idVal -= 1;
 
         //----0-indiziert
         this._changeInputGain(idVal, val);
       } else if (id.toUpperCase().includes("OUTPUTGAIN_")) {
         //----Die ID des OutputGains ist einstellig
-        var sID = id.substring(id.indexOf("GAIN_") + 5);
-        sID = sID.substring(0, 1);
+        var sID = id.substring(id.toUpperCase().indexOf("GAIN_") + 5);
+        //sID = sID.substring(0, 1);
         sID = sID.trim();
-        var idVal = parseInt(sTemp);
+        var idVal = parseInt(sID);
         idVal -= 1;
 
         //----0-indiziert
