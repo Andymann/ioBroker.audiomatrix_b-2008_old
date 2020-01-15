@@ -302,6 +302,13 @@ class AudiomatrixB2008 extends utils.Adapter {
 		}
 	}
 	
+	//----Rudimentaere Funktion, um syntaktisch prinzipiell korrekte Werte sichezustellen
+	simpleMap(pMinimal, pMaximal, pVal){
+		if(pVal<pMinimal){ pVal=pMinimal; }
+		else if(pVal>pMaximal){ pVal = pMaximal; }
+		return pVal;	  
+	}
+	
 	//----Daten komen von der HArdware an
 	_parseMSG(sMSG){
 		this.log.info("_parseMSG():" + sMSG);
@@ -316,9 +323,11 @@ class AudiomatrixB2008 extends utils.Adapter {
 			bWaitingForResponse=false;
 		}else if(sMSG.startsWith('5aa50700')){
 			this.log.info("_parseMSG(): received main volume from Matrix.");
-//			this.setStateAsync('mainVolume', { val: XXX, ack: true });
-    
-			
+			var sHex = sMSG.substring(8,16);
+			var iVal = HexToFloat32(sHex);
+			iVal = this.simpleMap(0, 100, iVal);
+			this.log.info("_parseMSG(): received main volume from Matrix. Processed Value:" + iVal.toString() );
+			this.setStateAsync('mainVolume', { val: iVal, ack: true });			
 		}else{
 			//--- TBD
 		}
