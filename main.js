@@ -623,12 +623,12 @@ class AudiomatrixB2008 extends utils.Adapter {
       await this.setObjectAsync("inputGain_" + (inVal + 1).toString(), {
         type: "state",
         common: {
-          name: "Input Gain",
+          name: "Input Gain " + (inVal + 1).toString(),
           type: "number",
           role: "level.volume",
           read: true,
           write: true,
-          desc: "Input Gain",
+          desc: "Input Gain " + (inVal + 1).toString(),
           min: 0,
           max: 100
         },
@@ -639,16 +639,16 @@ class AudiomatrixB2008 extends utils.Adapter {
 
   async _createState_outputGain() {
     parentThis.log.info("createStates(): outputGain");
-    for (var inVal = 0; inVal < 8; inVal++) {
-      await this.setObjectAsync("outputGain_" + (inVal + 1).toString(), {
+    for (var outVal = 0; outVal < 8; outVal++) {
+      await this.setObjectAsync("outputGain_" + (outVal + 1).toString(), {
         type: "state",
         common: {
-          name: "Output Gain",
+          name: "Output Gain " + (outVal + 1).toString(),
           type: "number",
           role: "level.volume",
           read: true,
           write: true,
-          desc: "Output Gain",
+          desc: "Output Gain" + (outVal + 1).toString(),
           min: 0,
           max: 100
         },
@@ -675,9 +675,18 @@ class AudiomatrixB2008 extends utils.Adapter {
           {
             type: "state",
             common: {
-              name: "routing",
+              name:
+                "Routing " +
+                (inVal + 1).toString() +
+                " -> " +
+                (outVal + 1).toString(),
               type: "boolean",
               role: "indicator",
+              desc:
+                "Routing " +
+                (inVal + 1).toString() +
+                " -> " +
+                (outVal + 1).toString(),
               read: true,
               write: true
             },
