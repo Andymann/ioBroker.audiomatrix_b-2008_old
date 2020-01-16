@@ -362,7 +362,8 @@ class AudiomatrixB2008 extends utils.Adapter {
           //----Gain
           this.log.info("_parseMSG(): received INPUT Value for GAIN:" + sMSG.substring(8, 16));
           var sValue = sMSG.substring(8, 16);
-          var iValue = parseInt(sHex, 16);
+          var iValue = HexToFloat32(sValue, 16);
+          this.log.info("_parseMSG(): received inputGain from Matrix. Original Value:" + sValue.toString());
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
           this.log.info("_parseMSG(): received inputGain from Matrix. Processed Value:" + iValue.toString());
           this.setStateAsync("inputGain", { val: iValue, ack: true });
@@ -371,12 +372,13 @@ class AudiomatrixB2008 extends utils.Adapter {
         //----Output....
         this.log.info("_parseMSG(): received OUTPUT Value");
         var sCmd = sMSG.substring(6, 8);
-        var iCmd = parseInt(sHex, 16);
+        var iCmd = parseInt(sCmd, 16);
         if (iCmd == 2) {
           //----Gain
           this.log.info("_parseMSG(): received OUTPUT Value for GAIN:" + sMSG.substring(8, 16));
           var sValue = sMSG.substring(8, 16);
-          var iValue = parseInt(sHex, 16);
+          var iValue = HexToFloat32(sValue, 16);
+          this.log.info("_parseMSG(): received outputGain from Matrix. Original Value:" + sValue.toString());
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
           this.log.info("_parseMSG(): received outputGain from Matrix. Processed Value:" + iValue.toString());
           this.setStateAsync("outputGain", { val: iValue, ack: true });
@@ -759,7 +761,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----Jahr
     tmpCMD[3] = 0x13;
     tmpCMD[4] = month[0];
-    tmpCMD[5] = month[1];
+    tmpCMD[5] = month[1];42c80000
     tmpCMD[6] = month[2];
     tmpCMD[7] = month[3];
 
