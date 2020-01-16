@@ -355,10 +355,12 @@ class AudiomatrixB2008 extends utils.Adapter {
       var iVal = parseInt(sHex, 16);
       if (iVal >= 1 && iVal <= 6) {
         //----Input....
+        this.log.info("_parseMSG(): received INPUT Value");
         var sCmd = sMSG.substring(6, 8);
-        var iCmd = HexToFloat32(sCmd);
+        var iCmd = parseInt(sCmd, 16);
         if (iCmd == 2) {
           //----Gain
+          this.log.info("_parseMSG(): received INPUT Value for GAIN:" + sMSG.substring(8, 16));
           var sValue = sMSG.substring(8, 16);
           var iValue = parseInt(sHex, 16);
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
@@ -367,10 +369,12 @@ class AudiomatrixB2008 extends utils.Adapter {
         }
       } else if (iVal >= 7 && iVal <= 14) {
         //----Output....
+        this.log.info("_parseMSG(): received OUTPUT Value");
         var sCmd = sMSG.substring(6, 8);
         var iCmd = parseInt(sHex, 16);
         if (iCmd == 2) {
           //----Gain
+          this.log.info("_parseMSG(): received OUTPUT Value for GAIN:" + sMSG.substring(8, 16));
           var sValue = sMSG.substring(8, 16);
           var iValue = parseInt(sHex, 16);
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
