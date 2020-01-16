@@ -369,8 +369,10 @@ class AudiomatrixB2008 extends utils.Adapter {
           this.setStateAsync("inputGain", { val: iValue, ack: true });
         }else if((iCmd>=51)&&(iCmd<=58)){
           this.log.info('_parseMSG(): received routing info. IN:' + (iVal).toString()  + ' OUT:' + (iCmd-50).toString());
-          //var sValue = sMSG.substring(8, 16);
-          //var iValue = HexToFloat32(sValue, 16);
+          var sValue = sMSG.substring(8, 16);
+          var iValue = HexToFloat32(sValue);
+          var bValue =  iValue!=0 ? true:false;
+          this.log.info('_parseMSG(): received routing info. IN:' + (iVal).toString()  + ' OUT:' + (iCmd-50).toString() + '. State:' + bValue.toString());
 
         }
       } else if (iVal >= 7 && iVal <= 14) {
