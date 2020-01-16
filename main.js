@@ -161,7 +161,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   pingMatrix() {
     if (bConnection == true) {
       if (arrCMD.length == 0) {
-        this.log.info("pingMatrix()");
+        this.log.debug("pingMatrix()");
         arrCMD.push(cmdConnect);
         //this.processCMD();
         //bWaitingForResponse=false;
@@ -234,7 +234,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         var tmp = arrCMD.shift();
         if (tmp.length == 10) {
           //----Normaler Befehl
-          this.log.info("processCMD: next CMD=" + this.toHexString(tmp) + " arrCMD.length rest=" + arrCMD.length.toString());
+          this.log.debug("processCMD: next CMD=" + this.toHexString(tmp) + " arrCMD.length rest=" + arrCMD.length.toString());
           lastCMD = tmp;
           iMaxTryCounter = MAXTRIES;
           matrix.write(tmp);
@@ -270,7 +270,7 @@ class AudiomatrixB2008 extends utils.Adapter {
       //    this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
       //}
     } else {
-      this.log.info("AudioMatrix: processCMD: bWaitingForResponse==TRUE. Nichts machen");
+      this.log.debug("AudioMatrix: processCMD: bWaitingForResponse==TRUE. Nichts machen");
     }
 
     //----Anzeige der Quelength auf der Oberflaeche
