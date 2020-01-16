@@ -344,7 +344,7 @@ class AudiomatrixB2008 extends utils.Adapter {
       bQueryInProgress = false;
       bWaitingForResponse = false;
     } else if (sMSG.startsWith("5aa50700")) {
-      this.log.info("_parseMSG(): received main volume from Matrix.");
+      //this.log.info("_parseMSG(): received main volume from Matrix.");
       var sHex = sMSG.substring(8, 16);
       var iVal = HexToFloat32(sHex);
       iVal = this.simpleMap(0, 100, iVal);
@@ -355,32 +355,32 @@ class AudiomatrixB2008 extends utils.Adapter {
       var iVal = parseInt(sHex, 16);
       if (iVal >= 1 && iVal <= 6) {
         //----Input....
-        this.log.info("_parseMSG(): received INPUT Value");
+        //this.log.info("_parseMSG(): received INPUT Value");
         var sCmd = sMSG.substring(6, 8);
         var iCmd = parseInt(sCmd, 16);
         if (iCmd == 2) {
           //----Gain
-          this.log.info("_parseMSG(): received INPUT Value for GAIN:" + sMSG.substring(8, 16));
+          //this.log.info("_parseMSG(): received INPUT Value for GAIN:" + sMSG.substring(8, 16));
           var sValue = sMSG.substring(8, 16);
           var iValue = HexToFloat32(sValue, 16);
-          this.log.info("_parseMSG(): received inputGain from Matrix. Original Value:" + sValue.toString());
+          //this.log.info("_parseMSG(): received inputGain from Matrix. Original Value:" + sValue.toString());
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
-          this.log.info("_parseMSG(): received inputGain from Matrix. Processed Value:" + iValue.toString());
+          this.log.info('_parseMSG(): received inputGain for Channel ' + (iVal).toString()  + ' from Matrix. Processed Value:' + iValue.toString());
           this.setStateAsync("inputGain", { val: iValue, ack: true });
         }
       } else if (iVal >= 7 && iVal <= 14) {
         //----Output....
-        this.log.info("_parseMSG(): received OUTPUT Value");
+        //this.log.info("_parseMSG(): received OUTPUT Value");
         var sCmd = sMSG.substring(6, 8);
         var iCmd = parseInt(sCmd, 16);
         if (iCmd == 2) {
           //----Gain
-          this.log.info("_parseMSG(): received OUTPUT Value for GAIN:" + sMSG.substring(8, 16));
+          //this.log.info("_parseMSG(): received OUTPUT Value for GAIN:" + sMSG.substring(8, 16));
           var sValue = sMSG.substring(8, 16);
           var iValue = HexToFloat32(sValue, 16);
-          this.log.info("_parseMSG(): received outputGain from Matrix. Original Value:" + sValue.toString());
+          //this.log.info("_parseMSG(): received outputGain from Matrix. Original Value:" + sValue.toString());
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
-          this.log.info("_parseMSG(): received outputGain from Matrix. Processed Value:" + iValue.toString());
+          this.log.info('_parseMSG(): received outputGain for Channel ' + (iVal-7).toString()  + ' from Matrix. Processed Value:' + iValue.toString());
           this.setStateAsync("outputGain", { val: iValue, ack: true });
         }
       }
