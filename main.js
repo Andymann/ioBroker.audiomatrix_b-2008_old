@@ -352,7 +352,7 @@ class AudiomatrixB2008 extends utils.Adapter {
       this.setStateAsync("mainVolume", { val: iVal, ack: true });
     } else {
       var sHex = sMSG.substring(4, 6);
-      var iVal = HexToFloat32(sHex);
+      var iVal = parseInt(sHex, 16);
       if (iVal >= 1 && iVal <= 6) {
         //----Input....
         var sCmd = sMSG.substring(6, 8);
@@ -360,7 +360,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         if (iCmd == 2) {
           //----Gain
           var sValue = sMSG.substring(8, 16);
-          var iValue = HexToFloat32(sHex);
+          var iValue = parseInt(sHex, 16);
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
           this.log.info("_parseMSG(): received inputGain from Matrix. Processed Value:" + iValue.toString());
           this.setStateAsync("inputGain", { val: iValue, ack: true });
@@ -368,11 +368,11 @@ class AudiomatrixB2008 extends utils.Adapter {
       } else if (iVal >= 7 && iVal <= 14) {
         //----Output....
         var sCmd = sMSG.substring(6, 8);
-        var iCmd = HexToFloat32(sCmd);
+        var iCmd = parseInt(sHex, 16);
         if (iCmd == 2) {
           //----Gain
           var sValue = sMSG.substring(8, 16);
-          var iValue = HexToFloat32(sHex);
+          var iValue = parseInt(sHex, 16);
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
           this.log.info("_parseMSG(): received outputGain from Matrix. Processed Value:" + iValue.toString());
           this.setStateAsync("outputGain", { val: iValue, ack: true });
