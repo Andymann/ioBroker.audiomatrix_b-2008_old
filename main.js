@@ -761,7 +761,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----Jahr
     tmpCMD[3] = 0x13;
     tmpCMD[4] = month[0];
-    tmpCMD[5] = month[1];42c80000
+    tmpCMD[5] = month[1];
     tmpCMD[6] = month[2];
     tmpCMD[7] = month[3];
 
