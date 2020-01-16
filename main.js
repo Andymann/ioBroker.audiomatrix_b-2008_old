@@ -331,7 +331,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     return pVal;
   }
 
-  //----Daten komen von der HArdware an
+  //----Daten komen von der Hardware an
   _parseMSG(sMSG) {
     this.log.info("_parseMSG():" + sMSG);
     if (sMSG === this.toHexString(cmdBasicResponse)) {
@@ -351,11 +351,11 @@ class AudiomatrixB2008 extends utils.Adapter {
       this.log.info("_parseMSG(): received main volume from Matrix. Processed Value:" + iVal.toString());
       this.setStateAsync("mainVolume", { val: iVal, ack: true });
     } else {
-      var sHex = sMSG.substring(4, 2);
+      var sHex = sMSG.substring(4, 6);
       var iVal = HexToFloat32(sHex);
       if (iVal >= 1 && iVal <= 6) {
         //----Input....
-        var sCmd = sMSG.substring(6, 2);
+        var sCmd = sMSG.substring(6, 8);
         var iCmd = HexToFloat32(sCmd);
         if (iCmd == 2) {
           //----Gain
@@ -367,7 +367,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         }
       } else if (iVal >= 7 && iVal <= 14) {
         //----Output....
-        var sCmd = sMSG.substring(6, 2);
+        var sCmd = sMSG.substring(6, 8);
         var iCmd = HexToFloat32(sCmd);
         if (iCmd == 2) {
           //----Gain
