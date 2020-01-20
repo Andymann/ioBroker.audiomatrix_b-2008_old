@@ -187,10 +187,8 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   reconnect() {
-    this.log.info("reconnect(). After 7.5 seconds");
-    bConnection = false;
-    //this.setState('info.connection', false, true);
-    
+    this.log.info("reconnect() in 7.5 seconds");
+        
     var recnt = setTimeout(function() { parentThis.initMatrix(); }, 7500);
     //        clearInterval(query);initmatrix
     //        clearTimeout(recnt);
@@ -228,6 +226,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     //parentThis.reconnect();
   }
 
+
+
   /*
 		Alle Befehle werden in arrCMD[] gespeichert. Die Methode arbeitet den naechsten Befehl ab.	
 	*/
@@ -254,6 +254,7 @@ class AudiomatrixB2008 extends utils.Adapter {
               //----Nach x Milisekunden ist noch gar nichts angekommen....
               parentThis.log.error('processCMD(): KEINE EINKOMMENDEN DATEN NACH ' + OFFLINETIMER.toString() + ' Milisekunden. OFFLINE?');
               parentThis._setOffline();
+              parentThis.reconnect();
             } else {
               //parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
             }
