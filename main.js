@@ -187,11 +187,11 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   reconnect() {
-    this.log.info("reconnect(). After 5 seconds");
+    this.log.info("reconnect(). After 7.5 seconds");
     bConnection = false;
     this.setState('info.connection', false, true);
     
-    var recnt = setTimeout(function() { parentThis.initMatrix(); }, 5000);
+    var recnt = setTimeout(function() { parentThis.initMatrix(); }, 7500);
     //        clearInterval(query);initmatrix
     //        clearTimeout(recnt);
     //        matrix.destroy();
@@ -245,7 +245,7 @@ class AudiomatrixB2008 extends utils.Adapter {
               clearInterval(pingInterval);
               bWaitingForResponse = false;
               matrix.destroy();
-              parentThis.initMatrix();
+              parentThis.reconnect();
             } else {
               //parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
             }
