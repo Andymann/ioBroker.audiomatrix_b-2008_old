@@ -222,6 +222,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     clearInterval(pingInterval);
     bWaitingForResponse = false;
     arrCMD = [];
+    bConnection = false;
     this.setState('info.connection', false, true); //Green led in 'Instances'
     //matrix.destroy();
     //parentThis.reconnect();
@@ -857,7 +858,8 @@ class AudiomatrixB2008 extends utils.Adapter {
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
 		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
+    */
+    /*
     await this.setObjectAsync("testVariable", {
       type: "state",
       common: {
@@ -869,7 +871,7 @@ class AudiomatrixB2008 extends utils.Adapter {
       },
       native: {}
     });
-
+    */
     //----
     this.createStates();
 
@@ -883,18 +885,18 @@ class AudiomatrixB2008 extends utils.Adapter {
 		you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
 		*/
     // the variable testVariable is set to true as command (ack=false)
-    await this.setStateAsync("testVariable", true);
+    //await this.setStateAsync("testVariable", true);
 
     // same thing, but the value is flagged "ack"
     // ack should be always set to true if the value is received from or acknowledged from the target system
-    await this.setStateAsync("testVariable", { val: true, ack: true });
+    //await this.setStateAsync("testVariable", { val: true, ack: true });
 
     // same thing, but the state is deleted after 30s (getState will return null afterwards)
-    await this.setStateAsync("testVariable", {
-      val: true,
-      ack: true,
-      expire: 30
-    });
+    //await this.setStateAsync("testVariable", {
+    //  val: true,
+    //  ack: true,
+    //  expire: 30
+    //});
 
     // examples for the checkPassword/checkGroup functions
     let result = await this.checkPasswordAsync("admin", "iobroker");
