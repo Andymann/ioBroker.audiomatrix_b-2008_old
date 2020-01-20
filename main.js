@@ -153,7 +153,6 @@ class AudiomatrixB2008 extends utils.Adapter {
 
   initMatrix() {
     this.log.info("initMatrix().");
-    matrix.destroy();
     this.connectMatrix();
   }
 
@@ -245,6 +244,7 @@ class AudiomatrixB2008 extends utils.Adapter {
               parentThis.log.error('processCMD(): KEINE EINKOMMENDEN DATEN NACH ' + OFFLINETIMER.toString() + ' Milisekunden. OFFLINE?');
               clearInterval(pingInterval);
               bWaitingForResponse = false;
+              matrix.destroy();
               parentThis.initMatrix();
             } else {
               //parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
