@@ -190,7 +190,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     this.log.info("reconnect(). After 5 seconds");
     bConnection = false;
     this.setState('info.connection', false, true);
-    matrix.destroy();
+    
     var recnt = setTimeout(function() { parentThis.initMatrix(); }, 5000);
     //        clearInterval(query);initmatrix
     //        clearTimeout(recnt);
@@ -244,7 +244,7 @@ class AudiomatrixB2008 extends utils.Adapter {
               parentThis.log.error('processCMD(): KEINE EINKOMMENDEN DATEN NACH ' + OFFLINETIMER.toString() + ' Milisekunden. OFFLINE?');
               clearInterval(pingInterval);
               bWaitingForResponse = false;
-              parentThis.reconnect();
+              parentThis.initMatrix();
             } else {
               //parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
             }
@@ -432,6 +432,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     matrix.on("error", function(e) {
       if (e.code == "ENOTFOUND" || e.code == "ECONNREFUSED" || e.code == "ETIMEDOUT") {
         matrix.destroy();
+        parentThis.initMatrix();
       }
       parentThis.log.error(e);
       //            parentThis.reconnect();
