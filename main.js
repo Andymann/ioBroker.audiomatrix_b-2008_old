@@ -407,7 +407,7 @@ class AudiomatrixB2008 extends utils.Adapter {
           //this.log.info("_parseMSG(): received inputGain from Matrix. Original Value:" + sValue.toString());
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
           this.log.info('_parseMSG(): received gain for input ' + (iVal).toString()  + ' from Hardware. Processed Value:' + iValue.toString());
-          this.setStateAsync("inputGain", { val: iValue, ack: true });
+          this.setStateAsync("inputGain_" + (iVal).toString(), { val: iValue, ack: true });
         }else if((iCmd>=51)&&(iCmd<=58)){
           this.log.info('_parseMSG(): received routing info. IN:' + (iVal).toString()  + ' OUT:' + (iCmd-50).toString());
           var sValue = sMSG.substring(8, 16);
@@ -429,7 +429,7 @@ class AudiomatrixB2008 extends utils.Adapter {
           //this.log.info("_parseMSG(): received outputGain from Matrix. Original Value:" + sValue.toString());
           iValue = map(iValue, -80, 0, 0, 100); //this.simpleMap(0, 100, iVal);
           this.log.info('_parseMSG(): received gain for output ' + (iVal-7).toString()  + ' from Hardware. Processed Value:' + iValue.toString());
-          this.setStateAsync("outputGain", { val: iValue, ack: true });
+          this.setStateAsync("outputGain_" + (iVal-7).toString(), { val: iValue, ack: true });
         }
       }
     }
