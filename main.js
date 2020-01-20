@@ -847,6 +847,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     //this.log.info("config option1: " + this.config.option1);
     //this.log.info("config option2: " + this.config.option2);
 
+    this.setState('info.connection', false, true);
+
     this.log.info("Config Host:" + this.config.host);
     this.log.info("Config Port:" + this.config.port);
     /*
@@ -869,7 +871,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //----
     this.createStates();
 
-    this.testConversion();
+    //this.testConversion();
 
     // in this template all states changes inside the adapters namespace are subscribed
     this.subscribeStates("*");
