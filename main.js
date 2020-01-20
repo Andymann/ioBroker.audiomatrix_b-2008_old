@@ -242,8 +242,8 @@ class AudiomatrixB2008 extends utils.Adapter {
   _connect() {
     this.log.info("_connect()");
     if (bConnection == false) {
-      parentThis.log.info("_connect().connection==false, sending CMDDISCONNECT:" + parentThis.toHexString(cmdDisconnect));
-      arrCMD.push(cmdDisconnect);
+      //parentThis.log.info("_connect().connection==false, sending CMDDISCONNECT:" + parentThis.toHexString(cmdDisconnect));
+      //arrCMD.push(cmdDisconnect);
 
       parentThis.log.info("_connect().connection==false, sending CMDCONNECT:" + parentThis.toHexString(cmdConnect));
       arrCMD.push(cmdConnect);
