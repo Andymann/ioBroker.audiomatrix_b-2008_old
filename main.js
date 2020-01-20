@@ -210,9 +210,9 @@ class AudiomatrixB2008 extends utils.Adapter {
       //  parentThis.processCMD();
       //}, 50);
 
-      if (cb) {
-        cb();
-      }
+      //if (cb) {
+      //  cb();
+      //}
     //});
   }
 
