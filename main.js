@@ -413,13 +413,13 @@ class AudiomatrixB2008 extends utils.Adapter {
           this.log.info('_parseMSG(): received gain for input ' + (iVal).toString()  + ' from Hardware. Processed Value:' + iValue.toString());
           this.setStateAsync("inputGain_" + (iVal).toString(), { val: iValue, ack: true });
         }else if((iCmd>=51)&&(iCmd<=58)){
-          this.log.info('_parseMSG(): received routing info. IN:' + (iVal).toString()  + ' OUT:' + (iCmd-50).toString());
+          //this.log.info('_parseMSG(): received routing info. IN:' + (iVal).toString()  + ' OUT:' + (iCmd-50).toString());
           var sValue = sMSG.substring(8, 16);
           var iValue = HexToFloat32(sValue);
           var bValue =  iValue!=0 ? true:false;
           this.log.info('_parseMSG(): received routing info. IN:' + (iVal).toString()  + ' OUT:' + (iCmd-50).toString() + '. State:' + bValue.toString());
           
-          var sID= ((iVal-1) * 8 + (iCmd-50-1)).toString();
+          var sID= (0 + (iVal-1) * 8 + (iCmd-50-1)).toString();
           while (sID.length < 2) sID = "0" + sID;
           //routingNode_ID_" + sID + "__IN_" + (inVal + 1).toString() + "_OUT_" + (outVal + 1).toString()
           this.setStateAsync('routingNode_ID_' + sID + '_IN_' + (iVal).toString() + '_OUT_' + (iCmd-50).toString(), { val: bValue, ack: true });
