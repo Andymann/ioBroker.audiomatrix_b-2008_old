@@ -153,6 +153,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 
   initMatrix() {
     this.log.info("initMatrix().");
+    matrix.destroy();
     this.connectMatrix();
   }
 
@@ -432,8 +433,8 @@ class AudiomatrixB2008 extends utils.Adapter {
 
     matrix.on("error", function(e) {
       if (e.code == "ENOTFOUND" || e.code == "ECONNREFUSED" || e.code == "ETIMEDOUT") {
-        matrix.destroy();
-        parentThis.initMatrix();
+        //matrix.destroy();
+        //parentThis.initMatrix();
       }
       parentThis.log.error(e);
       //            parentThis.reconnect();
@@ -453,7 +454,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 
     matrix.on("end", function(e) {
       parentThis.log.error("AudioMatrix ended");
-      parentThis.setState('info.connection', false, true);
+      //parentThis.setState('info.connection', false, true);
     });
   }
 
