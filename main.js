@@ -205,11 +205,10 @@ class AudiomatrixB2008 extends utils.Adapter {
       //  parentThis.pingMatrix();
       //}, PINGINTERVALL);
 
-      //----Queue
-      
-      //cmdInterval = setInterval(function() {
-      //  parentThis.processCMD();
-      //}, 50);
+      //----Queue      
+      cmdInterval = setInterval(function() {
+        parentThis.processCMD();
+      }, 50);
 
       //if (cb) {
       //  cb();
