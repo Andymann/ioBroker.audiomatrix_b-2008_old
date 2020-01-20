@@ -281,7 +281,7 @@ class AudiomatrixB2008 extends utils.Adapter {
           this.log.debug("processCMD: next CMD=" + this.toHexString(tmp) + " arrCMD.length rest=" + arrCMD.length.toString());
           lastCMD = tmp;
           iMaxTryCounter = MAXTRIES;
-          matrix.write(tmp);
+          //matrix.write(tmp);
           bHasIncomingData = false;
           clearTimeout(query);
           query = setTimeout(function() {
@@ -290,11 +290,12 @@ class AudiomatrixB2008 extends utils.Adapter {
               //----Nach x Milisekunden ist noch gar nichts angekommen....
               parentThis.log.error('processCMD(): KEINE EINKOMMENDEN DATEN NACH ' + OFFLINETIMER.toString() + ' Milisekunden. OFFLINE?');
               parentThis._setOffline();
-              parentThis.reconnect();
+              parentThis.reconnect();              
             } else {
               //parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
             }
           }, OFFLINETIMER);
+          matrix.write(tmp);
         } else if (tmp.length == 2) {
           //----WaitQueue, Der Wert entspricht den zu wartenden Milisekunden
           //var iWait = tmp[0] * 256 + tmp[1];
