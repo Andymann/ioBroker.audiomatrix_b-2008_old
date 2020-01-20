@@ -186,10 +186,45 @@ class AudiomatrixB2008 extends utils.Adapter {
     //        this.processCMD();
   }
 
+  reInit(){
+    this.log.info("reInit():" + this.config.host + ":" + this.config.port);
+
+    arrCMD = [];
+    bFirstPing = true;
+    bWaitingForResponse = false;
+
+    //matrix = new net.Socket();
+    //matrix.connect(this.config.port, this.config.host, function() {
+      clearInterval(pingInterval);
+      clearInterval(cmdInterval);
+      clearInterval(query);
+      parentThis._connect();
+      //query = setInterval(function(){parentThis._connect()}, BIGINTERVALL);
+      //pingInterval = setInterval(function() {
+      //  parentThis.pingMatrix();
+      //}, PINGINTERVALL);
+
+      //----Queue
+      
+      //cmdInterval = setInterval(function() {
+      //  parentThis.processCMD();
+      //}, 50);
+
+      if (cb) {
+        cb();
+      }
+    //});
+  }
+
   reconnect() {
-    this.log.info("reconnect() in 7.5 seconds");
+    this.log.info("reInit() in 7.5 seconds");
         
-    var recnt = setTimeout(function() { parentThis.initMatrix(); }, 7500);
+    var recnt = setTimeout(function() { parentThis.reInit(); }, 7500);
+
+
+
+
+
     //        clearInterval(query);initmatrix
     //        clearTimeout(recnt);
     //        matrix.destroy();
