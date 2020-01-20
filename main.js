@@ -189,7 +189,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   reconnect() {
     this.log.info("reconnect(). After 7.5 seconds");
     bConnection = false;
-    this.setState('info.connection', false, true);
+    //this.setState('info.connection', false, true);
     
     var recnt = setTimeout(function() { parentThis.initMatrix(); }, 7500);
     //        clearInterval(query);initmatrix
@@ -842,7 +842,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //this.log.info("config option1: " + this.config.option1);
     //this.log.info("config option2: " + this.config.option2);
 
-    this.setState('info.connection', false, true);
+    //this.setState('info.connection', false, true);
 
     this.log.info("Config Host:" + this.config.host);
     this.log.info("Config Port:" + this.config.port);
