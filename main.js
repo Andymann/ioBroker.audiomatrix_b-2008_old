@@ -190,8 +190,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     this.log.info("reconnect(). After 5 seconds");
     bConnection = false;
     this.setState('info.connection', false, true);
-    var recnt = setTimeout(function() { parentThis.initmatrix(); }, 5000);
-    //        clearInterval(query);
+    var recnt = setTimeout(function() { parentThis.initMatrix(); }, 5000);
+    //        clearInterval(query);initmatrix
     //        clearTimeout(recnt);
     //        matrix.destroy();
 
