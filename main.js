@@ -71,6 +71,7 @@ var lastCMD;
 var in_msg = "";
 var parentThis;
 var cmdConnect = new Buffer([0x5a, 0xa5, 0x14, 0x00, 0x40, 0x00, 0x00, 0x00, 0x0a, 0x5d]);
+var cmdDisconnect = new Buffer([0x5a, 0xa5, 0x14, 0x01, 0x3f, 0x80, 0x00, 0x00, 0x0a, 0x5d]);
 var cmdBasicResponse = new Buffer([0x5a, 0xa5, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0x0a, 0xa9]);
 var cmdTransmissionDone = new Buffer([0x5a, 0xa5, 0xf1, 0xf1, 0xf1, 0xf1, 0xf1, 0xf1, 0x0a, 0xaf]);
 
@@ -241,6 +242,9 @@ class AudiomatrixB2008 extends utils.Adapter {
   _connect() {
     this.log.info("_connect()");
     if (bConnection == false) {
+      parentThis.log.info("_connect().connection==false, sending CMDDISCONNECT:" + parentThis.toHexString(cmdDisconnect));
+      arrCMD.push(cmdDisconnect);
+
       parentThis.log.info("_connect().connection==false, sending CMDCONNECT:" + parentThis.toHexString(cmdConnect));
       arrCMD.push(cmdConnect);
       //iMaxTryCounter = MAXTRIES;
