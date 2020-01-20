@@ -450,7 +450,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 
     matrix.on("end", function(e) {
       parentThis.log.error("AudioMatrix ended");
-      this.setState('info.connection', false, true);
+      parentThis.setState('info.connection', false, true);
     });
   }
 
