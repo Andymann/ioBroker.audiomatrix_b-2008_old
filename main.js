@@ -59,8 +59,6 @@ var cmdInterval = null;
 var query = null;
 var bConnection = false;
 var bWaitingForResponse = false;
-var bQueryDone = false;
-var bQueryInProgress = false;
 var bHasIncomingData = false; //Irgendetwas kommt herein
 
 //----Wir koennen einmalig nach einem erfolgreichen Connect etwas machen
@@ -163,16 +161,16 @@ class AudiomatrixB2008 extends utils.Adapter {
       if (arrCMD.length == 0) {
         this.log.debug("pingMatrix()");
         arrCMD.push(cmdConnect);
-        //this.processCMD();
-        //bWaitingForResponse=false;
+
         if (bFirstPing) {
           //----Ab jetzt nicht mehr
           bFirstPing = false;
           this.setDate();
-          //this.setRouting();
+
         }
       }
     } else {
+      //----No Connection
     }
   }
 
@@ -189,14 +187,15 @@ class AudiomatrixB2008 extends utils.Adapter {
   }
 
   reconnect() {
-    this.log.info("AudioMatrix: reconnectMatrix(). TBD");
-    //		bFirstPing=true;
-    //        bConnection = false;
+    this.log.info("reconnect(). After 5 seconds");
+    bConnection = false;
+    this.setState('info.connection', false, true);
+    var recnt = setTimeout(function() { parentThis.initmatrix(); }, 5000);
     //        clearInterval(query);
     //        clearTimeout(recnt);
     //        matrix.destroy();
 
-    //        this.log.info('AudioMatrix: Reconnect after 15 sec...');
+    //this.log.info('AudioMatrix: Reconnect after 15 sec...');
     //        this.setState('info.connection', false, true);
     //this.setConnState(false, false);
     //        recnt = setTimeout(function() {
@@ -210,14 +209,11 @@ class AudiomatrixB2008 extends utils.Adapter {
       parentThis.log.info("_connect().connection==false, sending CMDCONNECT:" + parentThis.toHexString(cmdConnect));
       arrCMD.push(cmdConnect);
       //iMaxTryCounter = MAXTRIES;
-      //        	parentThis.processCMD();
+
     } else {
       parentThis.log.debug("_connect().bConnection==true. Nichts tun");
       //----Bei der 880er koennten wir etwas tun, hier nicht unbedingt
     }
-
-    //----Die verschiedenen Probleme rund um den Connect werden hier verarbeitet
-    //setTimeout(function(){ parentThis._connectionHandler }, SMALLINTERVALL);
   }
 
   /*
@@ -230,7 +226,7 @@ class AudiomatrixB2008 extends utils.Adapter {
       if (arrCMD.length > 0) {
         //this.log.info('processCMD: bWaitingForResponse==FALSE, arrCMD.length=' +arrCMD.length.toString());
         bWaitingForResponse = true;
-        //if(bWait==false){
+
         var tmp = arrCMD.shift();
         if (tmp.length == 10) {
           //----Normaler Befehl
@@ -244,7 +240,7 @@ class AudiomatrixB2008 extends utils.Adapter {
             //----Es ist ander als bei der 880er: 2 Sekunden keine Antwort und das Teil ist offline
             if (bHasIncomingData == false) {
               //----Nach x Milisekunden ist noch gar nichts angekommen....
-              parentThis.log.error("processCMD(): KEINE EINKOMMENDEN DATEN NACH ... Milisekunden. OFFLINE?");
+              parentThis.log.error('processCMD(): KEINE EINKOMMENDEN DATEN NACH ' + OFFLINETIMER.toString() + ' Milisekunden. OFFLINE?');
               clearInterval(pingInterval);
               bWaitingForResponse = false;
               parentThis.reconnect();
@@ -254,17 +250,12 @@ class AudiomatrixB2008 extends utils.Adapter {
           }, OFFLINETIMER);
         } else if (tmp.length == 2) {
           //----WaitQueue, Der Wert entspricht den zu wartenden Milisekunden
-          var iWait = tmp[0] * 256 + tmp[1];
-          this.log.info("processCMD.waitQueue: " + iWait.toString());
-          //bWait=true;
+          //var iWait = tmp[0] * 256 + tmp[1];
+          //this.log.info("processCMD.waitQueue: " + iWait.toString());
           //setTimeout(function(){ bWait=false; parentThis.log.info('processCMD.waitQueue DONE'); }, iWait);
         } else {
-          //----Nix
-          this.log.info("UKU");
-        }
-        //}else{
-        //	this.log.info('bWait==TRUE');
-        //}
+          //----Nix          
+        }        
       }
       //else{
       //    this.log.debug('AudioMatrix: processCMD: bWaitingForResponse==FALSE, arrCMD ist leer. Kein Problem');
@@ -281,6 +272,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     //parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
     in_msg += parentThis.toHexString(chunk);
     bHasIncomingData = true; // IrgendETWAS ist angekommen
+    
     if (bWaitingForResponse == true) {
       if (in_msg.length >= 20 && in_msg.includes("5aa5")) {
         var iStartPos = in_msg.indexOf("5aa5");
@@ -336,12 +328,13 @@ class AudiomatrixB2008 extends utils.Adapter {
     this.log.info("_parseMSG():" + sMSG);
     if (sMSG === this.toHexString(cmdBasicResponse)) {
       this.log.info("_parseMSG(): Basic Response.");
-      //this.bConnection=true;
+      
     } else if (sMSG === this.toHexString(cmdTransmissionDone)) {
       this.log.info("_parseMSG(): Transmission Done.");
+      
+      this.setState('info.connection', true, true); //Green led in 'Instances'
+
       bConnection = true;
-      bQueryDone = true;
-      bQueryInProgress = false;
       bWaitingForResponse = false;
     } else if (sMSG.startsWith("5aa50700")) {
       //this.log.info("_parseMSG(): received main volume from Matrix.");
@@ -398,8 +391,6 @@ class AudiomatrixB2008 extends utils.Adapter {
     this.log.info("connectMatrix():" + this.config.host + ":" + this.config.port);
 
     bFirstPing = true;
-    bQueryDone = false;
-    bQueryInProgress = false;
     bWaitingForResponse = false;
 
     matrix = new net.Socket();
