@@ -217,6 +217,16 @@ class AudiomatrixB2008 extends utils.Adapter {
     }
   }
 
+  _setOffline(){
+    this.log.info("_setOffline()");
+    clearInterval(pingInterval);
+    bWaitingForResponse = false;
+    arrCMD = [];
+    this.setState('info.connection', false, true); //Green led in 'Instances'
+    //matrix.destroy();
+    //parentThis.reconnect();
+  }
+
   /*
 		Alle Befehle werden in arrCMD[] gespeichert. Die Methode arbeitet den naechsten Befehl ab.	
 	*/
@@ -242,10 +252,7 @@ class AudiomatrixB2008 extends utils.Adapter {
             if (bHasIncomingData == false) {
               //----Nach x Milisekunden ist noch gar nichts angekommen....
               parentThis.log.error('processCMD(): KEINE EINKOMMENDEN DATEN NACH ' + OFFLINETIMER.toString() + ' Milisekunden. OFFLINE?');
-              clearInterval(pingInterval);
-              bWaitingForResponse = false;
-              //matrix.destroy();
-              //parentThis.reconnect();
+              parentThis._setOffline();
             } else {
               //parentThis.log.info("processCMD(): Irgendetwas kam an... es lebt.");
             }
