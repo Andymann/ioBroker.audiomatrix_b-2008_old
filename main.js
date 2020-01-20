@@ -201,9 +201,10 @@ class AudiomatrixB2008 extends utils.Adapter {
       parentThis._connect();
       
       query = setInterval(function(){parentThis._connect()}, BIGINTERVALL);
-      //pingInterval = setInterval(function() {
-      //  parentThis.pingMatrix();
-      //}, PINGINTERVALL);
+      
+      pingInterval = setInterval(function() {
+        parentThis.pingMatrix();
+      }, PINGINTERVALL);
 
       //----Queue      
       cmdInterval = setInterval(function() {
