@@ -391,6 +391,7 @@ class AudiomatrixB2008 extends utils.Adapter {
   connectMatrix(cb) {
     this.log.info("connectMatrix():" + this.config.host + ":" + this.config.port);
 
+    arrCMD = [];
     bFirstPing = true;
     bWaitingForResponse = false;
 
