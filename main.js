@@ -46,7 +46,7 @@ const ToFloat32 = num => {
 const HexToFloat32 = str => ToFloat32(parseInt(str, 16));
 const BinToFloat32 = str => ToFloat32(parseInt(str, 2));
 
-toHexString(byteArray) {
+function toHexString(byteArray) {
   return Array.from(byteArray, function(byte) {
     return ("0" + (byte & 0xff).toString(16)).slice(-2);
   }).join("");
