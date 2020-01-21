@@ -55,7 +55,7 @@ function toHexString(byteArray) {
 
 
 //----Gibt den Array mit korrekter Checksumme zurueck
-const convertArray(array) {
+function convertArray(array) {
   var tmpArr = array.slice();
 
   var tmpChk = 0;
@@ -68,8 +68,8 @@ const convertArray(array) {
 }
 
 
-const //----Hex-representing chars to array containing hex values
-toArray(response) {
+ //----Hex-representing chars to array containing hex values
+function toArray(response) {
   var chunks = [];
   for (var i = 0, charsLength = response.length; i < charsLength; i += 2) {
     chunks.push(parseInt(response.substring(i, i + 2), 16));
