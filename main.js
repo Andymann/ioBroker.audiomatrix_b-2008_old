@@ -46,6 +46,38 @@ const ToFloat32 = num => {
 const HexToFloat32 = str => ToFloat32(parseInt(str, 16));
 const BinToFloat32 = str => ToFloat32(parseInt(str, 2));
 
+const toHexString(byteArray) {
+  return Array.from(byteArray, function(byte) {
+    return ("0" + (byte & 0xff).toString(16)).slice(-2);
+  }).join("");
+}
+
+
+
+//----Gibt den Array mit korrekter Checksumme zurueck
+const convertArray(array) {
+  var tmpArr = array.slice();
+
+  var tmpChk = 0;
+  for (var i = 0; i < array.length - 1; i++) {
+    tmpChk += array[i];
+  }
+  tmpChk = tmpChk & 0xff;
+  tmpArr[tmpArr.length - 1] = tmpChk;
+  return tmpArr;
+}
+
+
+const //----Hex-representing chars to array containing hex values
+toArray(response) {
+  var chunks = [];
+  for (var i = 0, charsLength = response.length; i < charsLength; i += 2) {
+    chunks.push(parseInt(response.substring(i, i + 2), 16));
+  }
+  return chunks;
+}
+
+
 //https://gist.github.com/xposedbones/75ebaef3c10060a3ee3b246166caab56
 //---- Wert, IN von, IN bis, OUT von, OUT bis
 const map = (value, x1, y1, x2, y2) => ((value - x1) * (y2 - x2)) / (y1 - x1) + x2;
@@ -111,46 +143,10 @@ class AudiomatrixB2008 extends utils.Adapter {
     parentThis = this;
   }
 
-  toHexString(byteArray) {
-    return Array.from(byteArray, function(byte) {
-      return ("0" + (byte & 0xff).toString(16)).slice(-2);
-    }).join("");
-  }
+  
 
-  //----Hex-representing chars to array containing hex values
-  toArray(response) {
-    var chunks = [];
-    for (var i = 0, charsLength = response.length; i < charsLength; i += 2) {
-      chunks.push(parseInt(response.substring(i, i + 2), 16));
-    }
-    return chunks;
-  }
+  
 
-  //----Gibt den Array mit korrekter Checksumme zurueck
-  convertArray(array) {
-    var tmpArr = array.slice();
-
-    var tmpChk = 0;
-    for (var i = 0; i < array.length - 1; i++) {
-      tmpChk += array[i];
-    }
-    tmpChk = tmpChk & 0xff;
-    tmpArr[tmpArr.length - 1] = tmpChk;
-    return tmpArr;
-  }
-
-  compareArray(pArr1, pArr2) {
-    bReturn = false;
-    if (pArr1.length == pArr2.length) {
-      for (i = 0; i < pArr1.length; i++) {
-        if (pArr1[i] != pArr2[i]) {
-          break;
-        }
-        bReturn = true;
-      }
-    }
-    return bReturn;
-  }
 
   initMatrix() {
     this.log.info("initMatrix().");
@@ -245,7 +241,7 @@ class AudiomatrixB2008 extends utils.Adapter {
       //parentThis.log.info("_connect().connection==false, sending CMDDISCONNECT:" + parentThis.toHexString(cmdDisconnect));
       //arrCMD.push(cmdDisconnect);
 
-      parentThis.log.info("_connect().connection==false, sending CMDCONNECT:" + parentThis.toHexString(cmdConnect));
+      parentThis.log.info("_connect().connection==false, sending CMDCONNECT:" + toHexString(cmdConnect));
       arrCMD.push(cmdConnect);
       //iMaxTryCounter = MAXTRIES;
 
@@ -282,7 +278,7 @@ class AudiomatrixB2008 extends utils.Adapter {
         var tmp = arrCMD.shift();
         if (tmp.length == 10) {
           //----Normaler Befehl
-          this.log.debug("processCMD: next CMD=" + this.toHexString(tmp) + " arrCMD.length rest=" + arrCMD.length.toString());
+          this.log.debug("processCMD: next CMD=" + toHexString(tmp) + " arrCMD.length rest=" + arrCMD.length.toString());
           lastCMD = tmp;
           iMaxTryCounter = MAXTRIES;
           //matrix.write(tmp);
@@ -322,7 +318,7 @@ class AudiomatrixB2008 extends utils.Adapter {
 
   _processIncoming(chunk) {
     //parentThis.log.info("_processIncoming(): " + parentThis.toHexString(chunk) );
-    in_msg += parentThis.toHexString(chunk);
+    in_msg += toHexString(chunk);
     bHasIncomingData = true; // IrgendETWAS ist angekommen
     
     if (bWaitingForResponse == true) {
@@ -378,10 +374,10 @@ class AudiomatrixB2008 extends utils.Adapter {
   //----Daten komen von der Hardware an
   _parseMSG(sMSG) {
     this.log.info("_parseMSG():" + sMSG);
-    if (sMSG === this.toHexString(cmdBasicResponse)) {
+    if (sMSG === toHexString(cmdBasicResponse)) {
       this.log.info("_parseMSG(): Basic Response.");
       
-    } else if (sMSG === this.toHexString(cmdTransmissionDone)) {
+    } else if (sMSG === toHexString(cmdTransmissionDone)) {
       this.log.info("_parseMSG(): Transmission Done.");
       
       this.setState('info.connection', true, true); //Green led in 'Instances'
@@ -416,7 +412,7 @@ class AudiomatrixB2008 extends utils.Adapter {
           //this.log.info('_parseMSG(): received routing info. IN:' + (iVal).toString()  + ' OUT:' + (iCmd-50).toString());
           var sValue = sMSG.substring(8, 16);
           var iValue = HexToFloat32(sValue);
-          var bValue =  iValue!=0 ? true:false;
+          var bValue =  iValue==0 ? false:true;
           this.log.info('_parseMSG(): received routing info. IN:' + (iVal).toString()  + ' OUT:' + (iCmd-50).toString() + '. State:' + bValue.toString());
           
           var sID= (0 + (iVal-1) * 8 + (iCmd-50-1)).toString();
@@ -619,16 +615,16 @@ class AudiomatrixB2008 extends utils.Adapter {
     parentThis.log.info(`Input value (${value}) => binary (${f32_bin}) [${f32_bin.length} bits] => float32 (${f32_bin_inverse})`);
 
     parentThis.log.info("testConversion():" + f32_hex.toString());
-    parentThis.log.info("testConversion() len:" + parentThis.toArray(f32_hex.toString()).length.toString());
+    parentThis.log.info("testConversion() len:" + toArray(f32_hex.toString()).length.toString());
     parentThis.log.info(
       "testConversion() content:" +
-        parentThis.toArray(f32_hex.toString())[0].toString() +
+        toArray(f32_hex.toString())[0].toString() +
         "." +
-        parentThis.toArray(f32_hex.toString())[1].toString() +
+        toArray(f32_hex.toString())[1].toString() +
         "." +
-        parentThis.toArray(f32_hex.toString())[2].toString() +
+        toArray(f32_hex.toString())[2].toString() +
         "." +
-        parentThis.toArray(f32_hex.toString())[3].toString() +
+        toArray(f32_hex.toString())[3].toString() +
         "."
     );
   }
@@ -692,7 +688,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     tmpCMD[7] = arrVal[3];
 
     //----Checksumme korrigieren
-    tmpCMD = this.convertArray(tmpCMD);
+    tmpCMD = convertArray(tmpCMD);
 
     arrCMD.push(tmpCMD);
     //parentThis.processCMD();
@@ -715,8 +711,8 @@ class AudiomatrixB2008 extends utils.Adapter {
       tmpCMD[7] = arrVal[3];
 
       //----Checksumme korrigieren
-      tmpCMD = this.convertArray(tmpCMD);
-      this.log.info("changeInputGain(): adding:" + this.toHexString(tmpCMD));
+      tmpCMD = convertArray(tmpCMD);
+      this.log.info("changeInputGain(): adding:" + toHexString(tmpCMD));
       arrCMD.push(tmpCMD);
     } else {
       this.log.error("changeInputGain() via GUI: Coax inputs are not supported");
@@ -739,8 +735,8 @@ class AudiomatrixB2008 extends utils.Adapter {
     tmpCMD[7] = arrVal[3];
 
     //----Checksumme korrigieren
-    tmpCMD = this.convertArray(tmpCMD);
-    this.log.info("changeOutputGain(): adding:" + this.toHexString(tmpCMD));
+    tmpCMD = convertArray(tmpCMD);
+    this.log.info("changeOutputGain(): adding:" + toHexString(tmpCMD));
     arrCMD.push(tmpCMD);
   }
 
@@ -762,8 +758,8 @@ class AudiomatrixB2008 extends utils.Adapter {
       tmpCMD[7] = onOff[3];
 
       //----Checksumme korrigieren
-      tmpCMD = this.convertArray(tmpCMD);
-      this.log.info("changeRouting(): adding:" + this.toHexString(tmpCMD));
+      tmpCMD = convertArray(tmpCMD);
+      this.log.info("changeRouting(): adding:" + toHexString(tmpCMD));
       arrCMD.push(tmpCMD);
     } else {
       this.log.error("changeRouting() via GUI: Coax inputs are not supported");
@@ -806,7 +802,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     tmpCMD[7] = year[3];
 
     //----Checksumme korrigieren
-    tmpCMD = this.convertArray(tmpCMD);
+    tmpCMD = convertArray(tmpCMD);
 
     arrCMD.push(tmpCMD);
     //parentThis.processCMD();
@@ -825,7 +821,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     tmpCMD[7] = month[3];
 
     //----Checksumme korrigieren
-    tmpCMD = this.convertArray(tmpCMD);
+    tmpCMD = convertArray(tmpCMD);
 
     arrCMD.push(tmpCMD);
     //parentThis.processCMD();
@@ -844,7 +840,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     tmpCMD[7] = day[3];
 
     //----Checksumme korrigieren
-    tmpCMD = this.convertArray(tmpCMD);
+    tmpCMD = convertArray(tmpCMD);
 
     arrCMD.push(tmpCMD);
     //parentThis.processCMD();
@@ -863,7 +859,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     tmpCMD[7] = hour[3];
 
     //----Checksumme korrigieren
-    tmpCMD = this.convertArray(tmpCMD);
+    tmpCMD = convertArray(tmpCMD);
 
     arrCMD.push(tmpCMD);
     //parentThis.processCMD();
@@ -882,7 +878,7 @@ class AudiomatrixB2008 extends utils.Adapter {
     tmpCMD[7] = minute[3];
 
     //----Checksumme korrigieren
-    tmpCMD = this.convertArray(tmpCMD);
+    tmpCMD = convertArray(tmpCMD);
 
     arrCMD.push(tmpCMD);
     //parentThis.processCMD();
